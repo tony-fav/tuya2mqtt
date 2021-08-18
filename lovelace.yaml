@@ -1,0 +1,123 @@
+views:
+  - title: Dekala Light
+    path: dekala-light
+    icon: mdi:flash-circle
+    badges: []
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: light
+            entity: light.dekala_table_lamp_color_light
+            name: Color
+            icon: mdi:palette
+          - type: vertical-stack
+            cards:
+              - type: light
+                entity: light.dekala_table_lamp_effect_light
+                name: Effect
+                icon: mdi:flare
+              - type: entities
+                entities:
+                  - entity: number.dekala_table_lamp_effect_speed
+                    name: Speed
+                    icon: mdi:speedometer
+          - type: light
+            entity: light.dekala_table_lamp_night_light
+            name: Night
+            icon: hass:fire
+      - type: entities
+        entities:
+          - entity: sensor.dekala_table_lamp_alarms_status
+            name: Status
+          - entity: switch.dekala_table_lamp_turn_off_alarms
+            name: Turn Off
+        title: Alarms
+        show_header_toggle: false
+      - type: entities
+        title: Sleep Aid
+        entities:
+          - entity: switch.dekala_table_lamp_sleep_aid
+            name: Enable
+          - entity: number.dekala_table_lamp_sleep_aid_hours
+            name: Hours
+          - entity: number.dekala_table_lamp_sleep_aid_minutes
+            name: Minutes
+          - entity: switch.dekala_table_lamp_sleep_aid_sunday
+            name: Sunday
+          - entity: switch.dekala_table_lamp_sleep_aid_monday
+            name: Monday
+          - entity: switch.dekala_table_lamp_sleep_aid_tuesday
+            name: Tuesday
+          - entity: switch.dekala_table_lamp_sleep_aid_wednesday
+            name: Wednesday
+          - entity: switch.dekala_table_lamp_sleep_aid_thursday
+            name: Thursday
+          - entity: switch.dekala_table_lamp_sleep_aid_friday
+            name: Friday
+          - entity: switch.dekala_table_lamp_sleep_aid_saturday
+            name: Saturday
+          - entity: number.dekala_table_lamp_sleep_aid_light_advance_duration
+            name: Light Advance Duration
+          - entity: number.dekala_table_lamp_sleep_aid_duration
+            name: Duration
+          - entity: select.dekala_table_lamp_sleep_aid_light_type
+            name: Light Type
+          - entity: switch.dekala_table_lamp_sleep_aid_auto_close
+            name: Auto Close
+        show_header_toggle: false
+      - type: entities
+        title: Alarm 1
+        entities:
+          - entity: switch.dekala_table_lamp_alarm_1
+            name: Enable
+          - entity: number.dekala_table_lamp_alarm_1_hours
+            name: Hours
+          - entity: number.dekala_table_lamp_alarm_1_minutes
+            name: Minutes
+          - entity: switch.dekala_table_lamp_alarm_1_sunday
+            name: Sunday
+          - entity: switch.dekala_table_lamp_alarm_1_monday
+            name: Monday
+          - entity: switch.dekala_table_lamp_alarm_1_tuesday
+            name: Tuesday
+          - entity: switch.dekala_table_lamp_alarm_1_wednesday
+            name: Wednesday
+          - entity: switch.dekala_table_lamp_alarm_1_thursday
+            name: Thursday
+          - entity: switch.dekala_table_lamp_alarm_1_friday
+            name: Friday
+          - entity: switch.dekala_table_lamp_alarm_1_saturday
+            name: Saturday
+          - entity: number.dekala_table_lamp_alarm_1_duration
+            name: Duration
+          - entity: select.dekala_table_lamp_alarm_1_light_type
+            name: Light Type
+        show_header_toggle: false
+      - type: entities
+        title: Alarm 2
+        entities:
+          - entity: switch.dekala_table_lamp_alarm_2
+            name: Enable
+          - entity: number.dekala_table_lamp_alarm_2_hours
+            name: Hours
+          - entity: number.dekala_table_lamp_alarm_2_minutes
+            name: Minutes
+          - entity: switch.dekala_table_lamp_alarm_2_sunday
+            name: Sunday
+          - entity: switch.dekala_table_lamp_alarm_2_monday
+            name: Monday
+          - entity: switch.dekala_table_lamp_alarm_2_tuesday
+            name: Tuesday
+          - entity: switch.dekala_table_lamp_alarm_2_wednesday
+            name: Wednesday
+          - entity: switch.dekala_table_lamp_alarm_2_thursday
+            name: Thursday
+          - entity: switch.dekala_table_lamp_alarm_2_friday
+            name: Friday
+          - entity: switch.dekala_table_lamp_alarm_2_saturday
+            name: Saturday
+          - entity: number.dekala_table_lamp_alarm_2_duration
+            name: Duration
+          - entity: select.dekala_table_lamp_alarm_2_light_type
+            name: Light Type
+        show_header_toggle: false

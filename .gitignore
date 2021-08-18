@@ -1,1 +1,2 @@
-my-docker-compose.yaml
+secrets.py
+*.pyc
