@@ -1,0 +1,63 @@
+light:
+  - platform: mqtt
+    name: "Dekala Table Lamp Color Light"
+    # availability_topic: "tuya/dekala_table_lamp/LWT" # online or offline
+    state_topic: "tuya/dekala_table_lamp/color/state" # ON or OFF
+    command_topic: "tuya/dekala_table_lamp/color/state_set" # ON or OFF
+    brightness_state_topic: "tuya/dekala_table_lamp/color/brightness" # ON or OFF
+    brightness_command_topic: "tuya/dekala_table_lamp/color/brightness_set"
+    brightness_scale: 1000
+    hs_state_topic: "tuya/dekala_table_lamp/color/hs"
+    hs_command_topic: "tuya/dekala_table_lamp/color/hs_set"
+
+  - platform: mqtt
+    name: "Dekala Table Lamp Night Light"
+    # availability_topic: "tuya/dekala_table_lamp/LWT" # online or offline
+    state_topic: "tuya/dekala_table_lamp/night/state" # ON or OFF
+    command_topic: "tuya/dekala_table_lamp/night/state_set" # ON or OFF
+    brightness_state_topic: "tuya/dekala_table_lamp/night/brightness" # ON or OFF
+    brightness_command_topic: "tuya/dekala_table_lamp/night/brightness_set"
+    brightness_scale: 1000
+
+  - platform: mqtt
+    name: "Dekala Table Lamp Effect Light"
+    # availability_topic: "tuya/dekala_table_lamp/LWT" # online or offline
+    state_topic: "tuya/dekala_table_lamp/effect/state" # ON or OFF
+    command_topic: "tuya/dekala_table_lamp/effect/state_set" # ON or OFF
+    brightness_state_topic: "tuya/dekala_table_lamp/effect/brightness" # ON or OFF
+    brightness_command_topic: "tuya/dekala_table_lamp/effect/brightness_set"
+    brightness_scale: 1000
+    effect_state_topic: "tuya/dekala_table_lamp/effect/effect"
+    effect_command_topic: "tuya/dekala_table_lamp/effect/effect_set"
+    effect_list:
+      - "Aurora Left"
+      - "Aurora Right"
+      - "Sunlight Sunset Orange"
+      - "Sunlight Sunrise Pink"
+      - "Night Red"
+      - "Night Blue"
+      - "Night Orange"
+      - "Neon Clockwise"
+      - "Neon Counterclockwise"
+      - "Grassland GreenYellow"
+      - "Grassland GreenWhite"
+      - "Breath Red"
+      - "Breath Purple"
+      - "Breath Orange"
+      - "Breath Yellow"
+      - "Rainbow Up"
+      - "Rainbow Down"
+      - "Deep Sea RedBlueRed"
+      - "Deep Sea WhiteBlueWhite"
+      - "Bonfire Orange"
+      - "Bonfire Red"
+
+number:
+  - platform: mqtt
+    name: "Dekala Table Lamp Effect Speed"
+    # availability_topic: "tuya/dekala_table_lamp/LWT" # online or offline
+    state_topic: "tuya/dekala_table_lamp/effect/speed"
+    command_topic: "tuya/dekala_table_lamp/effect/speed_set"
+    min: 0
+    max: 8
+    step: 1
