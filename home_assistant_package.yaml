@@ -216,8 +216,9 @@ select:
 switch:
   - platform: mqtt
     name: "Dekala Table Lamp Turn Off Alarms"
+    availability_topic: "tuya/dekala_table_lamp/LWT"
+    state_topic: "tuya/dekala_table_lamp/alarms/status" # acknowledgement
     command_topic: "tuya/dekala_table_lamp/alarms/status_set"
-    optimistic: false
 
   # SLEEP AID
   - platform: mqtt

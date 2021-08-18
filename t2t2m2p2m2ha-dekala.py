@@ -441,6 +441,7 @@ def on_message(client, userdata, msg):
         # any message published here turns alarms off
         if logging: publog('HA: Stop Active Alarm')
         publish(command_topic + 'TuyaSend1', payload='112,1')
+        publish(HA_TOPIC + 'alarms/status', payload='OFF') # put switch back in HA
 
     # HA Setting DPID 106 - Sleep Aid State (bool)
     elif msg.topic == HA_TOPIC + 'alarms/sleep_aid/state_set':
