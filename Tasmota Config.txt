@@ -7,7 +7,7 @@ GPIO02 -> LEDLinki
 - TuyaMCU tries to assign dpid=1 to a switch. Says to do this to turn that off
 TuyaMCU 99,1
 
-- Get MQTT Publishes (not needed long term, but useful for testing, rules long term)
+- Get MQTT Publishes
 SetOption66 1
 
 - Set timezone right bc this thing uses alarms (US, Eastern Time)
