@@ -6,12 +6,29 @@ MQTT_HOST = os.getenv('MQTT_HOST')
 MQTT_PORT = int(os.getenv('MQTT_PORT', 1883))
 MQTT_USER = os.getenv('MQTT_USER')
 MQTT_PASSWORD = os.getenv('MQTT_PASSWORD')
-MQTT_CLIENT = os.getenv('MQTT_CLIENT', 't2t2m2p2m2ha-dekala')
+MQTT_CLIENT = os.getenv('MQTT_CLIENT', 't2t2m2p2m2ha-dekala_table_lamp')
 MQTT_QOS = int(os.getenv('MQTT_QOS', 1))
 DEVICE_TOPIC = os.getenv('DEVICE_TOPIC', 'tasmota_XXXXXX')
-HA_TOPIC = os.getenv('HA_TOPIC', 'tuya/dekala_table_lamp/')
+DEVICE_TYPE= os.getenv('DEVICE_TYPE')
+HA_TOPIC = os.getenv('HA_TOPIC', 't2t2m2p2m2ha/dekala_table_lamp/')
 
-# from secrets import MQTT_HOST, MQTT_PORT, MQTT_USER, MQTT_PASSWORD, MQTT_CLIENT, MQTT_QOS, DEVICE_TOPIC, HA_TOPIC
+# from secrets import MQTT_HOST, MQTT_PORT, MQTT_USER, MQTT_PASSWORD, MQTT_CLIENT, MQTT_QOS, DEVICE_TOPIC, DEVICE_TYPE, HA_TOPIC
+
+assert DEVICE_TYPE.lower() == 'dekala_table_lamp'
+
+# Virtual Color Temperature
+VCT_mired = [153.0, 222.2, 294.1, 357.1, 434.8, 500.0]
+VCT_hue = [60, 27, 28, 28, 30, 31]
+VCT_sat = [1.6, 26.7, 47.1, 62.7, 80.4, 94.5]
+def interp(xq, x, y):
+    if xq < x[0]:
+        return y[0]
+    elif xq > x[-1]:
+        return y[-1]
+    else:
+        for n in range(len(x)-1):
+            if x[n] <= xq <= x[n+1]:
+                return y[n] + (xq-x[n])*(y[n+1]-y[n])/(x[n+1]-x[n])
 
 logging = True
 
@@ -390,6 +407,12 @@ def on_message(client, userdata, msg):
         if logging: publog('HA: Set Color Light Hue %f and Saturation %f' % (temp1, temp2))
         dpid_str = ('%04x' % int(temp1)) + ('%04x' % int(10*temp2)) + ('%04x' % 1000)
         publish(command_topic + 'TuyaSend3', payload='11,'+dpid_str)
+
+    elif msg.topic == HA_TOPIC + 'color/VCT' + '_set':
+        mired = float(payload_str)
+        hue = interp(mired, VCT_mired, VCT_hue)
+        sat = interp(mired, VCT_mired, VCT_sat)
+        publish(command_topic + 'TuyaSend3', payload='11,%04x%04x%04x' % (int(hue), int(10*sat), 1000))
 
     # HA Setting DPID 101 - Color Light Brightness (value)
     elif msg.topic == HA_TOPIC + 'color/brightness_set':

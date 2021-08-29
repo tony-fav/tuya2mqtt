@@ -1,0 +1,32 @@
+views:
+  - title: heimvision
+    path: heimvision
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: light
+                entity: light.heimvision_nl_white_light
+                name: White
+              - type: light
+                entity: light.heimvision_nl_color_light
+                name: Color
+              - type: light
+                entity: light.heimvision_nl_effect_light
+                name: Effect
+              - type: light
+                entity: light.heimvision_nl_sound
+                name: Sound
+          - type: entities
+            entities:
+              - entity: switch.heimvision_nl_sound_timer
+                name: Sound Timer
+              - entity: number.heimvision_nl_sound_timer_hours
+                name: Hours
+              - entity: number.heimvision_nl_sound_timer_minutes
+                name: Minutes
+              - entity: number.heimvision_nl_sound_timer_seconds
+                name: Seconds
+            show_header_toggle: false

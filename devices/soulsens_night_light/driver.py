@@ -2,17 +2,19 @@ import os
 import json
 import paho.mqtt.client as mqtt
 
-# MQTT_HOST = os.getenv('MQTT_HOST')
-# MQTT_PORT = int(os.getenv('MQTT_PORT', 1883))
-# MQTT_USER = os.getenv('MQTT_USER')
-# MQTT_PASSWORD = os.getenv('MQTT_PASSWORD')
-# MQTT_CLIENT = os.getenv('MQTT_CLIENT', 't2t2m2p2m2ha-soulsens_night_light')
-# MQTT_QOS = int(os.getenv('MQTT_QOS', 1))
-# DEVICE_TOPIC = os.getenv('DEVICE_TOPIC', 'tasmota_XXXXXX')
-# DEVICE_TYPE= os.getenv('DEVICE_TYPE', 'soulsens_night_light')
-# HA_TOPIC = os.getenv('HA_TOPIC', 't2t2m2p2m2ha/soulsens_night_light/')
+MQTT_HOST = os.getenv('MQTT_HOST')
+MQTT_PORT = int(os.getenv('MQTT_PORT', 1883))
+MQTT_USER = os.getenv('MQTT_USER')
+MQTT_PASSWORD = os.getenv('MQTT_PASSWORD')
+MQTT_CLIENT = os.getenv('MQTT_CLIENT', 't2t2m2p2m2ha-soulsens_night_light')
+MQTT_QOS = int(os.getenv('MQTT_QOS', 1))
+DEVICE_TOPIC = os.getenv('DEVICE_TOPIC', 'tasmota_XXXXXX')
+DEVICE_TYPE= os.getenv('DEVICE_TYPE', 'soulsens_night_light')
+HA_TOPIC = os.getenv('HA_TOPIC', 't2t2m2p2m2ha/soulsens_night_light/')
 
-from secrets_soulsens_night_light import MQTT_HOST, MQTT_PORT, MQTT_USER, MQTT_PASSWORD, MQTT_CLIENT, MQTT_QOS, DEVICE_TOPIC, DEVICE_TYPE, HA_TOPIC
+# from secrets import MQTT_HOST, MQTT_PORT, MQTT_USER, MQTT_PASSWORD, MQTT_CLIENT, MQTT_QOS, DEVICE_TOPIC, DEVICE_TYPE, HA_TOPIC
+
+assert DEVICE_TYPE.lower() == 'soulsens_night_light'
 
 logging = True
 
@@ -33,10 +35,15 @@ white_light_temperature = 100
 color_light_state = False
 color_light_brightness = 8
 color_light_hue = 0
-color_light_saturation = 100
 effect_light_state = False
 effect_light_brightness = 8
 effect_light_effect = 'FlameOn'
+
+hex2bool = {'00': False, '01': True}
+bool2payload = {False: 'OFF', True: 'ON'}
+
+light_effect_types = ['','Breathe','Leap','Sunset','Candle']
+inv_light_effect_types = {v: i for i, v in enumerate(light_effect_types)}
 
 
 # Helper Functions for Tuya Serial
@@ -77,6 +84,16 @@ def on_connect(client, userdata, flags, rc):
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
     global light_settings # DPID 103
+    global light_state
+    global white_light_state
+    global white_light_brightness
+    global white_light_temperature
+    global color_light_state
+    global color_light_brightness
+    global color_light_hue
+    global effect_light_state
+    global effect_light_brightness
+    global effect_light_effect
 
     payload_str = str(msg.payload.decode("utf-8"))
     # if logging: publog('%s: %s' % (msg.topic, payload_str))
@@ -138,7 +155,40 @@ def on_message(client, userdata, msg):
                         DpIdData = datapoint['DpIdData']
 
                         if DpId == 103 and DpIdType == 0:
-                            pass
+                            light_settings = DpIdData
+                            light_state = hex2bool[DpIdData[0:2]]
+                            white_light_state = hex2bool[DpIdData[2:4]]
+                            white_light_brightness = int(DpIdData[4:6], 16)
+                            white_light_temperature = (50000 - 347*int(DpIdData[6:8], 16)) // 100
+                            color_light_state = hex2bool[DpIdData[8:10]]
+                            color_light_brightness = int(DpIdData[10:12],16)
+                            color_light_hue = int(DpIdData[12:16],16)
+                            effect_light_state = hex2bool[DpIdData[16:18]]
+                            effect_light_brightness = int(DpIdData[18:20],16)
+                            effect_light_effect = int(DpIdData[20:22],16)
+
+                            publish(HA_TOPIC + 'white/state', payload=bool2payload[light_state and white_light_state])
+                            publish(HA_TOPIC + 'white/brightness', payload='%d' % white_light_brightness)
+                            publish(HA_TOPIC + 'white/color_temp', payload='%d' % white_light_temperature)
+                            publish(HA_TOPIC + 'color/state', payload=bool2payload[light_state and color_light_state])
+                            publish(HA_TOPIC + 'color/brightness', payload='%d' % color_light_brightness)
+                            publish(HA_TOPIC + 'color/hs', payload='%d,100' % color_light_hue)
+                            publish(HA_TOPIC + 'effect/state', payload=bool2payload[light_state and effect_light_state])
+                            publish(HA_TOPIC + 'effect/brightness', payload='%d' % effect_light_brightness)
+                            publish(HA_TOPIC + 'effect/effect', payload=light_effect_types[effect_light_effect])
+
+
+
+                            print(light_state)
+                            print(white_light_state)
+                            print(white_light_brightness)
+                            print(white_light_temperature)
+                            print(color_light_state)
+                            print(color_light_brightness)
+                            print(color_light_hue)
+                            print(effect_light_state)
+                            print(effect_light_brightness)
+                            print(effect_light_effect)
 
                         if logging: publog(str(datapoint))
             else:
