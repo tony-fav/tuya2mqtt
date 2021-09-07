@@ -130,7 +130,7 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe(HA_TOPIC + '#')
 
     # Query Status
-    publish(command_topic + 'TuyaSend0', payload='')
+    pubcom('TuyaSend0', payload='')
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
@@ -162,6 +162,9 @@ def on_message(client, userdata, msg):
     if msg.topic == lwt_topic:
         if payload_str == 'Online':
             publish(HA_TOPIC + 'LWT', payload='online')
+
+            # Query Status
+            pubcom('TuyaSend0', payload='')
         else:
             publish(HA_TOPIC + 'LWT', payload='offline')
 
@@ -176,7 +179,7 @@ def on_message(client, userdata, msg):
             # Tuya MCU Sent Heartbeat
             if tuya_rec_dict['Cmnd'] == 0:
                 if tuya_rec_dict['CmndData'] == 0:
-                    publish(command_topic + 'TuyaSend0', payload='') # ask for state again
+                    pubcom('TuyaSend0', payload='') # ask for state again
                     if logging: publog('Heart Beat 0: Detected MCU Reset')
                 else:
                     if logging: publog('Heart Beat 1')
@@ -396,234 +399,234 @@ def on_message(client, userdata, msg):
     elif msg.topic == HA_TOPIC + 'color/state_set':
         if payload_str == 'ON':
             if logging: publog('HA: Turn Color Light On')
-            if not color_light_state: publish(command_topic + 'TuyaSend1', payload='2,1')
+            if not color_light_state: pubcom('TuyaSend1', payload='2,1')
         else:
             if logging: publog('HA: Turn Color Light Off')
-            if color_light_state: publish(command_topic + 'TuyaSend1', payload='2,0')
+            if color_light_state: pubcom('TuyaSend1', payload='2,0')
 
     # HA Setting DPID 11 - Color Light Settings (12-string, 4-HUE, 4-SAT, 4-BRI but unused)
     elif msg.topic == HA_TOPIC + 'color/hs_set':
         temp1, temp2 = (float(x) for x in payload_str.split(','))
         if logging: publog('HA: Set Color Light Hue %f and Saturation %f' % (temp1, temp2))
         dpid_str = ('%04x' % int(temp1)) + ('%04x' % int(10*temp2)) + ('%04x' % 1000)
-        publish(command_topic + 'TuyaSend3', payload='11,'+dpid_str)
+        pubcom('TuyaSend3', payload='11,'+dpid_str)
 
     elif msg.topic == HA_TOPIC + 'color/VCT' + '_set':
         mired = float(payload_str)
         hue = interp(mired, VCT_mired, VCT_hue)
         sat = interp(mired, VCT_mired, VCT_sat)
-        publish(command_topic + 'TuyaSend3', payload='11,%04x%04x%04x' % (int(hue), int(10*sat), 1000))
+        pubcom('TuyaSend3', payload='11,%04x%04x%04x' % (int(hue), int(10*sat), 1000))
 
     # HA Setting DPID 101 - Color Light Brightness (value)
     elif msg.topic == HA_TOPIC + 'color/brightness_set':
         if logging: publog('HA: Set Color Light Brightness %f' % float(payload_str))
-        publish(command_topic + 'TuyaSend2', payload='101,'+str(max(10, min(1000, int(payload_str)))))
+        pubcom('TuyaSend2', payload='101,'+str(max(10, min(1000, int(payload_str)))))
 
     # HA Setting DPID 104 - Night Light State (bool)
     elif msg.topic == HA_TOPIC + 'night/state_set':
         if payload_str == 'ON':
             if logging: publog('HA: Turn Night Light On')
-            if not night_light_state: publish(command_topic + 'TuyaSend1', payload='104,1')
+            if not night_light_state: pubcom('TuyaSend1', payload='104,1')
         else:
             if logging: publog('HA: Turn Night Light Off')
-            if night_light_state: publish(command_topic + 'TuyaSend1', payload='104,0')
+            if night_light_state: pubcom('TuyaSend1', payload='104,0')
 
     # HA Setting DPID 124 - Night Light Brightness (value)
     elif msg.topic == HA_TOPIC + 'night/brightness_set':
         if logging: publog('HA: Set Night Light Brightness %f' % float(payload_str))
-        publish(command_topic + 'TuyaSend2', payload='124,'+str(max(10, min(1000, int(payload_str)))))
+        pubcom('TuyaSend2', payload='124,'+str(max(10, min(1000, int(payload_str)))))
 
     # HA Setting DPID 102 - Effect Light State (bool)
     elif msg.topic == HA_TOPIC + 'effect/state_set':
         if payload_str == 'ON':
             if logging: publog('HA: Turn Effect Light On')
-            if not effect_light_state: publish(command_topic + 'TuyaSend1', payload='102,1')
+            if not effect_light_state: pubcom('TuyaSend1', payload='102,1')
         else:
             if logging: publog('HA: Turn Effect Light Off')
-            if effect_light_state: publish(command_topic + 'TuyaSend1', payload='102,0')
+            if effect_light_state: pubcom('TuyaSend1', payload='102,0')
 
     # HA Setting DPID 123 - Effect Light Brightness (value)
     elif msg.topic == HA_TOPIC + 'effect/brightness_set':
         if logging: publog('HA: Set Effect Light Brightness %f' % float(payload_str))
-        publish(command_topic + 'TuyaSend2', payload='123,'+str(max(10, min(1000, int(payload_str)))))
+        pubcom('TuyaSend2', payload='123,'+str(max(10, min(1000, int(payload_str)))))
 
     # HA Setting DPID 103 - Effect Light Settings (raw)
     elif msg.topic == HA_TOPIC + 'effect/effect_set':
         effect_mode, effect_variation = effects_dict[payload_str]
         if logging: publog('HA: Set Effect Light Effect (name,mode,variation) (%s, %d, %d)' % (payload_str,effect_mode,effect_variation))
         raw_str = '%02X000000000000000000000000000000000000000000000000000000000000000000000000000000000000%02X%02X' % (effect_mode, effect_light_speed, effect_variation)
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(103, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(103, raw_str))
     elif msg.topic == HA_TOPIC + 'effect/speed_set':
         if logging: publog('HA: Set Effect Light Speed %f' % float(payload_str))
         effect_mode, effect_variation = effects_dict[effect_light_effect]
         raw_str = '%02X000000000000000000000000000000000000000000000000000000000000000000000000000000000000%02X%02X' % (effect_mode, int(payload_str), effect_variation)
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(103, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(103, raw_str))
 
     # HA Setting DPID 112 - Turn Off Alarm Command
     elif msg.topic == HA_TOPIC + 'alarms/status_set':
         # any message published here turns alarms off
         if logging: publog('HA: Stop Active Alarm')
-        publish(command_topic + 'TuyaSend1', payload='112,1')
+        pubcom('TuyaSend1', payload='112,1')
         publish(HA_TOPIC + 'alarms/status', payload='OFF') # put switch back in HA
 
     # HA Setting DPID 106 - Sleep Aid State (bool)
     elif msg.topic == HA_TOPIC + 'alarms/sleep_aid/state_set':
         if payload_str == 'ON':
             if logging: publog('HA: Turn Sleep Aid On')
-            if not sleep_aid_state: publish(command_topic + 'TuyaSend1', payload='106,1')
+            if not sleep_aid_state: pubcom('TuyaSend1', payload='106,1')
         else:
             if logging: publog('HA: Turn Sleep Aid Off')
-            if sleep_aid_state: publish(command_topic + 'TuyaSend1', payload='106,0')
+            if sleep_aid_state: pubcom('TuyaSend1', payload='106,0')
 
     # HA Setting DPID 108 - Alarm 1 State (bool)
     elif msg.topic == HA_TOPIC + 'alarms/alarm_1/state_set':
         if payload_str == 'ON':
             if logging: publog('HA: Turn Alarm 1 On')
-            if not alarm_1_state: publish(command_topic + 'TuyaSend1', payload='108,1')
+            if not alarm_1_state: pubcom('TuyaSend1', payload='108,1')
         else:
             if logging: publog('HA: Turn Alarm 1 Off')
-            if alarm_1_state: publish(command_topic + 'TuyaSend1', payload='108,0')
+            if alarm_1_state: pubcom('TuyaSend1', payload='108,0')
 
     # HA Setting DPID 110 - Alarm 2 State (bool)
     elif msg.topic == HA_TOPIC + 'alarms/alarm_2/state_set':
         if payload_str == 'ON':
             if logging: publog('HA: Turn Alarm 2 On')
-            if not alarm_2_state: publish(command_topic + 'TuyaSend1', payload='110,1')
+            if not alarm_2_state: pubcom('TuyaSend1', payload='110,1')
         else:
             if logging: publog('HA: Turn Alarm 2 Off')
-            if alarm_2_state: publish(command_topic + 'TuyaSend1', payload='110,0')
+            if alarm_2_state: pubcom('TuyaSend1', payload='110,0')
 
     # HA Setting DPID 107 - Sleep Aid Settings (raw)
     elif msg.topic == HA_TOPIC + 'alarms/sleep_aid/hours_set':
         raw_str = ('%02X' % int(payload_str)) + sleep_aid_settings[2:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(107, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(107, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/sleep_aid/minutes_set':
         raw_str = sleep_aid_settings[0:2] + ('%02X' % int(payload_str)) + sleep_aid_settings[4:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(107, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(107, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/sleep_aid/duration_set':
         raw_str = sleep_aid_settings[0:12] + ('%02X' % int(payload_str)) + sleep_aid_settings[14:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(107, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(107, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/sleep_aid/light_type_set':
         raw_str = sleep_aid_settings[0:14] + ('%02X' % inv_sleep_aid_light_types[payload_str]) + sleep_aid_settings[16:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(107, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(107, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/sleep_aid/light_advance_duration_set':
         raw_str = sleep_aid_settings[0:16] + ('%02X' % int(payload_str)) + sleep_aid_settings[18:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(107, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(107, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/sleep_aid/auto_close_set':
         raw_str = sleep_aid_settings[0:18] + ('%02X' % inv_binary_payload[payload_str]) + sleep_aid_settings[20:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(107, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(107, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/sleep_aid/sun_set':
         temp = str(inv_binary_payload[payload_str]) + sleep_aid_days[1:]
         raw_str = sleep_aid_settings[0:4] + ('%02X' % int(temp, 2)) + sleep_aid_settings[6:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(107, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(107, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/sleep_aid/sat_set':
         temp = sleep_aid_days[0:1] + str(inv_binary_payload[payload_str]) + sleep_aid_days[2:]
         raw_str = sleep_aid_settings[0:4] + ('%02X' % int(temp, 2)) + sleep_aid_settings[6:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(107, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(107, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/sleep_aid/fri_set':
         temp = sleep_aid_days[0:2] + str(inv_binary_payload[payload_str]) + sleep_aid_days[3:]
         raw_str = sleep_aid_settings[0:4] + ('%02X' % int(temp, 2)) + sleep_aid_settings[6:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(107, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(107, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/sleep_aid/thu_set':
         temp = sleep_aid_days[0:3] + str(inv_binary_payload[payload_str]) + sleep_aid_days[4:]
         raw_str = sleep_aid_settings[0:4] + ('%02X' % int(temp, 2)) + sleep_aid_settings[6:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(107, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(107, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/sleep_aid/wed_set':
         temp = sleep_aid_days[0:4] + str(inv_binary_payload[payload_str]) + sleep_aid_days[5:]
         raw_str = sleep_aid_settings[0:4] + ('%02X' % int(temp, 2)) + sleep_aid_settings[6:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(107, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(107, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/sleep_aid/tue_set':
         temp = sleep_aid_days[0:5] + str(inv_binary_payload[payload_str]) + sleep_aid_days[6:]
         raw_str = sleep_aid_settings[0:4] + ('%02X' % int(temp, 2)) + sleep_aid_settings[6:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(107, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(107, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/sleep_aid/mon_set':
         temp = sleep_aid_days[0:6] + str(inv_binary_payload[payload_str])
         raw_str = sleep_aid_settings[0:4] + ('%02X' % int(temp, 2)) + sleep_aid_settings[6:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(107, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(107, raw_str))
 
     # HA Setting DPID 109 - Alarm 1 Settings (raw)
     elif msg.topic == HA_TOPIC + 'alarms/alarm_1/hours_set':
         raw_str = ('%02X' % int(payload_str)) + alarm_1_settings[2:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(109, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(109, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/alarm_1/minutes_set':
         raw_str = alarm_1_settings[0:2] + ('%02X' % int(payload_str)) + alarm_1_settings[4:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(109, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(109, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/alarm_1/duration_set':
         raw_str = alarm_1_settings[0:12] + ('%02X' % int(payload_str)) + alarm_1_settings[14:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(109, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(109, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/alarm_1/light_type_set':
         raw_str = alarm_1_settings[0:14] + ('%02X' % inv_alarm_light_types[payload_str]) + alarm_1_settings[16:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(109, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(109, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/alarm_1/sun_set':
         temp = str(inv_binary_payload[payload_str]) + alarm_1_days[1:]
         raw_str = alarm_1_settings[0:4] + ('%02X' % int(temp, 2)) + alarm_1_settings[6:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(109, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(109, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/alarm_1/sat_set':
         temp = alarm_1_days[0:1] + str(inv_binary_payload[payload_str]) + alarm_1_days[2:]
         raw_str = alarm_1_settings[0:4] + ('%02X' % int(temp, 2)) + alarm_1_settings[6:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(109, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(109, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/alarm_1/fri_set':
         temp = alarm_1_days[0:2] + str(inv_binary_payload[payload_str]) + alarm_1_days[3:]
         raw_str = alarm_1_settings[0:4] + ('%02X' % int(temp, 2)) + alarm_1_settings[6:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(109, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(109, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/alarm_1/thu_set':
         temp = alarm_1_days[0:3] + str(inv_binary_payload[payload_str]) + alarm_1_days[4:]
         raw_str = alarm_1_settings[0:4] + ('%02X' % int(temp, 2)) + alarm_1_settings[6:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(109, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(109, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/alarm_1/wed_set':
         temp = alarm_1_days[0:4] + str(inv_binary_payload[payload_str]) + alarm_1_days[5:]
         raw_str = alarm_1_settings[0:4] + ('%02X' % int(temp, 2)) + alarm_1_settings[6:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(109, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(109, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/alarm_1/tue_set':
         temp = alarm_1_days[0:5] + str(inv_binary_payload[payload_str]) + alarm_1_days[6:]
         raw_str = alarm_1_settings[0:4] + ('%02X' % int(temp, 2)) + alarm_1_settings[6:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(109, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(109, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/alarm_1/mon_set':
         temp = alarm_1_days[0:6] + str(inv_binary_payload[payload_str])
         raw_str = alarm_1_settings[0:4] + ('%02X' % int(temp, 2)) + alarm_1_settings[6:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(109, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(109, raw_str))
 
     # HA Setting DPID 111 - Alarm 2 Settings (raw)
     elif msg.topic == HA_TOPIC + 'alarms/alarm_2/hours_set':
         raw_str = ('%02X' % int(payload_str)) + alarm_2_settings[2:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(111, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(111, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/alarm_2/minutes_set':
         raw_str = alarm_2_settings[0:2] + ('%02X' % int(payload_str)) + alarm_2_settings[4:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(111, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(111, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/alarm_2/duration_set':
         raw_str = alarm_2_settings[0:12] + ('%02X' % int(payload_str)) + alarm_2_settings[14:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(111, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(111, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/alarm_2/light_type_set':
         raw_str = alarm_2_settings[0:14] + ('%02X' % inv_alarm_light_types[payload_str]) + alarm_2_settings[16:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(111, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(111, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/alarm_2/sun_set':
         temp = str(inv_binary_payload[payload_str]) + alarm_2_days[1:]
         raw_str = alarm_2_settings[0:4] + ('%02X' % int(temp, 2)) + alarm_2_settings[6:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(111, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(111, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/alarm_2/sat_set':
         temp = alarm_2_days[0:1] + str(inv_binary_payload[payload_str]) + alarm_2_days[2:]
         raw_str = alarm_2_settings[0:4] + ('%02X' % int(temp, 2)) + alarm_2_settings[6:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(111, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(111, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/alarm_2/fri_set':
         temp = alarm_2_days[0:2] + str(inv_binary_payload[payload_str]) + alarm_2_days[3:]
         raw_str = alarm_2_settings[0:4] + ('%02X' % int(temp, 2)) + alarm_2_settings[6:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(111, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(111, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/alarm_2/thu_set':
         temp = alarm_2_days[0:3] + str(inv_binary_payload[payload_str]) + alarm_2_days[4:]
         raw_str = alarm_2_settings[0:4] + ('%02X' % int(temp, 2)) + alarm_2_settings[6:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(111, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(111, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/alarm_2/wed_set':
         temp = alarm_2_days[0:4] + str(inv_binary_payload[payload_str]) + alarm_2_days[5:]
         raw_str = alarm_2_settings[0:4] + ('%02X' % int(temp, 2)) + alarm_2_settings[6:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(111, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(111, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/alarm_2/tue_set':
         temp = alarm_2_days[0:5] + str(inv_binary_payload[payload_str]) + alarm_2_days[6:]
         raw_str = alarm_2_settings[0:4] + ('%02X' % int(temp, 2)) + alarm_2_settings[6:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(111, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(111, raw_str))
     elif msg.topic == HA_TOPIC + 'alarms/alarm_2/mon_set':
         temp = alarm_2_days[0:6] + str(inv_binary_payload[payload_str])
         raw_str = alarm_2_settings[0:4] + ('%02X' % int(temp, 2)) + alarm_2_settings[6:]
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(111, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(111, raw_str))
 
 client = mqtt.Client(MQTT_CLIENT)
 client.username_pw_set(MQTT_USER , MQTT_PASSWORD)
@@ -635,6 +638,10 @@ client.connect(MQTT_HOST, port=MQTT_PORT)
 # Redefine Publish with The QOS Setting
 def publish(topic, payload=None, qos=MQTT_QOS, retain=True, properties=None):
     client.publish(topic, payload=payload, qos=qos, retain=retain, properties=properties)
+
+# Tasmota command is a different publish that we won't use retain for
+def pubcom(command, payload=None):
+    client.publish(command_topic + command, payload=payload, qos=MQTT_QOS, retain=False, properties=None)
 
 # Basic Logging over MQTT
 def publog(x):

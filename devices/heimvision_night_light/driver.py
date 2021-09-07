@@ -2,17 +2,17 @@ import os
 import json
 import paho.mqtt.client as mqtt
 
-MQTT_HOST = os.getenv('MQTT_HOST')
-MQTT_PORT = int(os.getenv('MQTT_PORT', 1883))
-MQTT_USER = os.getenv('MQTT_USER')
-MQTT_PASSWORD = os.getenv('MQTT_PASSWORD')
-MQTT_CLIENT = os.getenv('MQTT_CLIENT', 't2t2m2p2m2ha-heimvision_night_light')
-MQTT_QOS = int(os.getenv('MQTT_QOS', 1))
-DEVICE_TOPIC = os.getenv('DEVICE_TOPIC', 'tasmota_XXXXXX')
-DEVICE_TYPE= os.getenv('DEVICE_TYPE')
-HA_TOPIC = os.getenv('HA_TOPIC', 't2t2m2p2m2ha/heimvision_night_light/')
+# MQTT_HOST = os.getenv('MQTT_HOST')
+# MQTT_PORT = int(os.getenv('MQTT_PORT', 1883))
+# MQTT_USER = os.getenv('MQTT_USER')
+# MQTT_PASSWORD = os.getenv('MQTT_PASSWORD')
+# MQTT_CLIENT = os.getenv('MQTT_CLIENT', 't2t2m2p2m2ha-heimvision_night_light')
+# MQTT_QOS = int(os.getenv('MQTT_QOS', 1))
+# DEVICE_TOPIC = os.getenv('DEVICE_TOPIC', 'tasmota_XXXXXX')
+# DEVICE_TYPE= os.getenv('DEVICE_TYPE')
+# HA_TOPIC = os.getenv('HA_TOPIC', 't2t2m2p2m2ha/heimvision_night_light/')
 
-# from secrets import MQTT_HOST, MQTT_PORT, MQTT_USER, MQTT_PASSWORD, MQTT_CLIENT, MQTT_QOS, DEVICE_TOPIC, DEVICE_TYPE, HA_TOPIC
+from secrets import MQTT_HOST, MQTT_PORT, MQTT_USER, MQTT_PASSWORD, MQTT_CLIENT, MQTT_QOS, DEVICE_TOPIC, DEVICE_TYPE, HA_TOPIC
 
 assert DEVICE_TYPE.lower() == 'heimvision_night_light'
 
@@ -108,8 +108,8 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe(HA_TOPIC + '#')
 
     # Query Status (by saying "i have no cloud access, wait i do")
-    publish(command_topic + 'SerialSend5', payload='55aa000300010306')
-    publish(command_topic + 'SerialSend5', payload='55aa000300010407')
+    pubcom('SerialSend5', payload='55aa000300010306')
+    pubcom('SerialSend5', payload='55aa000300010407')
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
@@ -141,6 +141,10 @@ def on_message(client, userdata, msg):
     if msg.topic == lwt_topic:
         if payload_str == 'Online':
             publish(HA_TOPIC + 'LWT', payload='online')
+            
+            # Query Status (by saying "i have no cloud access, wait i do")
+            pubcom('SerialSend5', payload='55aa000300010306')
+            pubcom('SerialSend5', payload='55aa000300010407')
         else:
             publish(HA_TOPIC + 'LWT', payload='offline')
 
@@ -155,7 +159,7 @@ def on_message(client, userdata, msg):
             # Tuya MCU Sent Heartbeat
             if tuya_rec_dict['Cmnd'] == 0:
                 if tuya_rec_dict['CmndData'] == 0:
-                    publish(command_topic + 'TuyaSend0', payload='') # ask for state again
+                    pubcom('TuyaSend0', payload='') # ask for state again
                     if logging: publog('Heart Beat 0: Detected MCU Reset')
                 else:
                     pass
@@ -298,59 +302,59 @@ def on_message(client, userdata, msg):
     # HA's _set Topics
     elif msg.topic == HA_TOPIC + 'white/state' + '_set':
         if payload_str == 'ON':
-            if not device_state: publish(command_topic + 'TuyaSend1', payload='101,1')
-            if not white_light_state: publish(command_topic + 'TuyaSend4', payload='21,0')
-            if not light_state: publish(command_topic + 'TuyaSend1', payload='20,1')
+            if not device_state: pubcom('TuyaSend1', payload='101,1')
+            if not white_light_state: pubcom('TuyaSend4', payload='21,0')
+            if not light_state: pubcom('TuyaSend1', payload='20,1')
         else:
-            if light_state: publish(command_topic + 'TuyaSend1', payload='20,0')
+            if light_state: pubcom('TuyaSend1', payload='20,0')
 
     elif msg.topic == HA_TOPIC + 'color/state' + '_set':
         if payload_str == 'ON':
-            if not device_state: publish(command_topic + 'TuyaSend1', payload='101,1')
-            if not color_light_state: publish(command_topic + 'TuyaSend4', payload='21,1')
-            if not color_light_state: publish(command_topic + 'TuyaSend3', payload='24,%04x%04x%04x' % (int(color_light_hue), int(10*color_light_saturation), color_light_brightness))
-            if not light_state: publish(command_topic + 'TuyaSend1', payload='20,1')
+            if not device_state: pubcom('TuyaSend1', payload='101,1')
+            if not color_light_state: pubcom('TuyaSend4', payload='21,1')
+            if not color_light_state: pubcom('TuyaSend3', payload='24,%04x%04x%04x' % (int(color_light_hue), int(10*color_light_saturation), color_light_brightness))
+            if not light_state: pubcom('TuyaSend1', payload='20,1')
         else:
-            if light_state: publish(command_topic + 'TuyaSend1', payload='20,0')
+            if light_state: pubcom('TuyaSend1', payload='20,0')
 
     elif msg.topic == HA_TOPIC + 'effect/state' + '_set':
         if payload_str == 'ON':
-            if not device_state: publish(command_topic + 'TuyaSend1', payload='101,1')
-            if not effect_light_state: publish(command_topic + 'TuyaSend4', payload='21,2')
-            if not light_state: publish(command_topic + 'TuyaSend1', payload='20,1')
+            if not device_state: pubcom('TuyaSend1', payload='101,1')
+            if not effect_light_state: pubcom('TuyaSend4', payload='21,2')
+            if not light_state: pubcom('TuyaSend1', payload='20,1')
         else:
-            if light_state: publish(command_topic + 'TuyaSend1', payload='20,0')
+            if light_state: pubcom('TuyaSend1', payload='20,0')
 
     elif msg.topic == HA_TOPIC + 'white/brightness' + '_set':
-        publish(command_topic + 'TuyaSend2', payload='22,%d' % max(10, int(payload_str)))
+        pubcom('TuyaSend2', payload='22,%d' % max(10, int(payload_str)))
 
     elif msg.topic == HA_TOPIC + 'color/brightness' + '_set':
-        publish(command_topic + 'TuyaSend3', payload='24,%04x%04x%04x' % (int(color_light_hue), int(10*color_light_saturation), max(10, int(payload_str))))
+        pubcom('TuyaSend3', payload='24,%04x%04x%04x' % (int(color_light_hue), int(10*color_light_saturation), max(10, int(payload_str))))
 
     elif msg.topic == HA_TOPIC + 'color/hs' + '_set':
         temp1, temp2 = (float(x) for x in payload_str.split(','))
-        publish(command_topic + 'TuyaSend3', payload='24,%04x%04x%04x' % (int(temp1), int(10*temp2), color_light_brightness))
+        pubcom('TuyaSend3', payload='24,%04x%04x%04x' % (int(temp1), int(10*temp2), color_light_brightness))
 
     elif msg.topic == HA_TOPIC + 'color/effect' + '_set':
         if payload_str == 'None':
-            publish(command_topic + 'TuyaSend1', payload='104,0')
+            pubcom('TuyaSend1', payload='104,0')
         elif payload_str == 'Breath':
-            publish(command_topic + 'TuyaSend1', payload='104,1')
+            pubcom('TuyaSend1', payload='104,1')
         else:
             publog('unknown color/effect_set %s' % payload_str)
 
     elif msg.topic == HA_TOPIC + 'sound/state' + '_set':
         if payload_str == 'ON':
-            if not device_state: publish(command_topic + 'TuyaSend1', payload='101,1')
-            if not sound_state: publish(command_topic + 'TuyaSend4', payload='106,1')
+            if not device_state: pubcom('TuyaSend1', payload='101,1')
+            if not sound_state: pubcom('TuyaSend4', payload='106,1')
         else:
-            if sound_state: publish(command_topic + 'TuyaSend4', payload='106,0')
+            if sound_state: pubcom('TuyaSend4', payload='106,0')
 
     elif msg.topic == HA_TOPIC + 'sound/volume' + '_set':
-        publish(command_topic + 'TuyaSend2', payload='108,%d' % max(5, int(payload_str)))
+        pubcom('TuyaSend2', payload='108,%d' % max(5, int(payload_str)))
 
     elif msg.topic == HA_TOPIC + 'sound/choice' + '_set':
-        publish(command_topic + 'TuyaSend2', payload='109,%d' % inv_sound_types[payload_str])
+        pubcom('TuyaSend2', payload='109,%d' % inv_sound_types[payload_str])
 
     elif msg.topic == HA_TOPIC + 'timer/state' + '_set':
         if payload_str == 'ON':
@@ -361,7 +365,7 @@ def on_message(client, userdata, msg):
         else:
             raw_str = '00'
         raw_str = raw_str + '%02x%02x%02x' % (timer_hours, timer_minutes, timer_seconds)
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(105, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(105, raw_str))
 
     elif msg.topic == HA_TOPIC + 'timer/hours' + '_set':
         if timer_state:
@@ -369,7 +373,7 @@ def on_message(client, userdata, msg):
         else:
             raw_str = '00'
         raw_str = raw_str + '%02x%02x%02x' % (int(payload_str), timer_minutes, timer_seconds)
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(105, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(105, raw_str))
 
     elif msg.topic == HA_TOPIC + 'timer/minutes' + '_set':
         if timer_state:
@@ -377,7 +381,7 @@ def on_message(client, userdata, msg):
         else:
             raw_str = '00'
         raw_str = raw_str + '%02x%02x%02x' % (timer_hours, int(payload_str), timer_seconds)
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(105, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(105, raw_str))
 
     elif msg.topic == HA_TOPIC + 'timer/seconds' + '_set':
         if timer_state:
@@ -385,25 +389,25 @@ def on_message(client, userdata, msg):
         else:
             raw_str = '00'
         raw_str = raw_str + '%02x%02x%02x' % (timer_hours, timer_minutes, int(payload_str))
-        publish(command_topic + 'SerialSend5', payload=tuya_payload_raw(105, raw_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(105, raw_str))
         
     elif msg.topic == HA_TOPIC + 'unknown/state' + '_set':
         if payload_str == 'ON':
-            if not unknown_state: publish(command_topic + 'TuyaSend1', payload='112,1')
+            if not unknown_state: pubcom('TuyaSend1', payload='112,1')
         else:
-            if unknown_state: publish(command_topic + 'TuyaSend1', payload='112,0')
+            if unknown_state: pubcom('TuyaSend1', payload='112,0')
 
     elif msg.topic == HA_TOPIC + 'device/state' + '_set':
         if payload_str == 'ON':
-            if not device_state: publish(command_topic + 'TuyaSend1', payload='101,1')
+            if not device_state: pubcom('TuyaSend1', payload='101,1')
         else:
-            if device_state: publish(command_topic + 'TuyaSend1', payload='101,0')
+            if device_state: pubcom('TuyaSend1', payload='101,0')
 
     elif msg.topic == HA_TOPIC + 'color/VCT' + '_set':
         mired = float(payload_str)
         hue = interp(mired, VCT_mired, VCT_hue)
         sat = interp(mired, VCT_mired, VCT_sat)
-        publish(command_topic + 'TuyaSend3', payload='24,%04x%04x%04x' % (int(hue), int(10*sat), color_light_brightness))
+        pubcom('TuyaSend3', payload='24,%04x%04x%04x' % (int(hue), int(10*sat), color_light_brightness))
 
 
 
@@ -419,6 +423,9 @@ client.connect(MQTT_HOST, port=MQTT_PORT)
 # Redefine Publish with The QOS Setting
 def publish(topic, payload=None, qos=MQTT_QOS, retain=True, properties=None):
     client.publish(topic, payload=payload, qos=qos, retain=retain, properties=properties)
+
+def pubcom(command, payload=None):
+    client.publish(command_topic + command, payload=payload, qos=MQTT_QOS, retain=False, properties=None)
 
 # Basic Logging over MQTT
 def publog(x):
