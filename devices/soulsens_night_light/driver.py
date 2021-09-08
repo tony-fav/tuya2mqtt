@@ -12,7 +12,7 @@ DEVICE_TOPIC = os.getenv('DEVICE_TOPIC', 'tasmota_XXXXXX')
 DEVICE_TYPE= os.getenv('DEVICE_TYPE', 'soulsens_night_light')
 HA_TOPIC = os.getenv('HA_TOPIC', 't2t2m2p2m2ha/soulsens_night_light/')
 
-from secrets import MQTT_HOST, MQTT_PORT, MQTT_USER, MQTT_PASSWORD, MQTT_CLIENT, MQTT_QOS, DEVICE_TOPIC, DEVICE_TYPE, HA_TOPIC
+# from secrets import MQTT_HOST, MQTT_PORT, MQTT_USER, MQTT_PASSWORD, MQTT_CLIENT, MQTT_QOS, DEVICE_TOPIC, DEVICE_TYPE, HA_TOPIC
 
 assert DEVICE_TYPE.lower() == 'soulsens_night_light'
 
@@ -38,7 +38,7 @@ color_light_brightness = 8
 color_light_hue = 0
 effect_light_state = False
 effect_light_brightness = 8
-effect_light_effect = 'FlameOn'
+effect_light_effect = 4
 sound_settings = '00010100'
 sound_state = False
 sound_effect = 1
@@ -83,16 +83,34 @@ alarm_4_sound = 0
 alarm_4_volume = 1
 alarm_4_snooze = 5
 
-
 sleep_settings = '1E000001010F01010A64000A0000000A01'
 sleep_time_settings = '1E00'
 sleep_state = False
 sleep_sound_settings = '01010F'
 sleep_light_settings = '01010A64000A0000000A01'
 
+sleep_time_minutes = 1
+sleep_time_seconds = 0
+sleep_sound_state = False
+sleep_sound_effect = 1
+sleep_sound_volume = 1
+sleep_light_state = True
+sleep_white_light_state = False
+sleep_white_light_brightness = 1
+sleep_white_light_temperature = 153
+sleep_color_light_state = False
+sleep_color_light_brightness = 1
+sleep_color_light_hue = 0
+sleep_effect_light_state = True
+sleep_effect_light_brightness = 10
+sleep_effect_light_effect = 4
+sleep_remaining_time_minutes = 1
+sleep_remaining_time_seconds = 0
 
 hex2bool = {'00': False, '01': True}
 bool2payload = {False: 'OFF', True: 'ON'}
+bool2hex = {False: '00', True: '01'}
+payload2hex = {'OFF': '00', 'ON': '01'}
 binary_payload = ['OFF', 'ON']
 inv_binary_payload = {'OFF': 0, 'ON': 1}
 
@@ -286,6 +304,10 @@ def on_message(client, userdata, msg):
                         if DpId == 20 and DpIdType == 1:
                             device_state = hex2bool[DpIdData]
                             publish(HA_TOPIC + 'device/state', payload=bool2payload[device_state])
+                            publish(HA_TOPIC + 'alarms/alarm_1/state', payload=bool2payload[device_state and alarm_1_state])
+                            publish(HA_TOPIC + 'alarms/alarm_2/state', payload=bool2payload[device_state and alarm_2_state])
+                            publish(HA_TOPIC + 'alarms/alarm_3/state', payload=bool2payload[device_state and alarm_3_state])
+                            publish(HA_TOPIC + 'alarms/alarm_4/state', payload=bool2payload[device_state and alarm_4_state])
 
                         # 103 11  raw Light Settings
                         elif DpId == 103 and DpIdType == 0:
@@ -300,13 +322,13 @@ def on_message(client, userdata, msg):
                             effect_light_state = hex2bool[DpIdData[16:18]]
                             effect_light_brightness = int(DpIdData[18:20],16)
                             effect_light_effect = int(DpIdData[20:22],16)
-                            publish(HA_TOPIC + 'white/state', payload=bool2payload[device_state and light_state and white_light_state])
+                            publish(HA_TOPIC + 'white/state', payload=bool2payload[light_state and white_light_state])
                             publish(HA_TOPIC + 'white/brightness', payload='%d' % white_light_brightness) # scale 20
                             publish(HA_TOPIC + 'white/color_temp', payload='%d' % white_light_temperature) # mireds, already adjusted calculation
-                            publish(HA_TOPIC + 'color/state', payload=bool2payload[device_state and light_state and color_light_state])
+                            publish(HA_TOPIC + 'color/state', payload=bool2payload[light_state and color_light_state])
                             publish(HA_TOPIC + 'color/brightness', payload='%d' % color_light_brightness) # scale 20
                             publish(HA_TOPIC + 'color/hs', payload='%d,100' % color_light_hue)
-                            publish(HA_TOPIC + 'effect/state', payload=bool2payload[device_state and light_state and effect_light_state])
+                            publish(HA_TOPIC + 'effect/state', payload=bool2payload[light_state and effect_light_state])
                             publish(HA_TOPIC + 'effect/brightness', payload='%d' % effect_light_brightness) # scale 20
                             publish(HA_TOPIC + 'effect/effect', payload=light_effect_types[effect_light_effect])
 
@@ -317,7 +339,7 @@ def on_message(client, userdata, msg):
                             sound_effect = int(DpIdData[2:4], 16)
                             sound_volume = int(DpIdData[4:6], 16) # 1 to 15
                             sound_timer = int(DpIdData[6:8], 16) # minutes
-                            publish(HA_TOPIC + 'sound/state', payload=bool2payload[device_state and sound_state])
+                            publish(HA_TOPIC + 'sound/state', payload=bool2payload[sound_state])
                             publish(HA_TOPIC + 'sound/effect', payload=sound_effect_types[sound_effect])
                             publish(HA_TOPIC + 'sound/volume', payload='%d' % sound_volume) # scale 15
                             publish(HA_TOPIC + 'sound/timer', payload='%d' % sound_timer)
@@ -338,7 +360,7 @@ def on_message(client, userdata, msg):
                             alarm_1_sound = int(alarm_1_settings[10:12], 16) # 0 to all
                             alarm_1_volume = int(alarm_1_settings[12:14], 16) # 1 to 15
                             alarm_1_snooze = int(alarm_1_settings[14:16], 16) # minutes
-                            publish(HA_TOPIC + 'alarms/alarm_1/state', payload=bool2payload[alarm_1_state])
+                            publish(HA_TOPIC + 'alarms/alarm_1/state', payload=bool2payload[device_state and alarm_1_state])
                             publish(HA_TOPIC + 'alarms/alarm_1/time_hour', payload='%d' % (alarm_1_time // 60))
                             publish(HA_TOPIC + 'alarms/alarm_1/time_minute', payload='%d' % (alarm_1_time % 60))
                             publish(HA_TOPIC + 'alarms/alarm_1/brightness', payload='%d' % alarm_1_brightness)
@@ -361,7 +383,7 @@ def on_message(client, userdata, msg):
                             alarm_2_sound = int(alarm_2_settings[10:12], 16) # 0 to all
                             alarm_2_volume = int(alarm_2_settings[12:14], 16) # 1 to 15
                             alarm_2_snooze = int(alarm_2_settings[14:16], 16) # minutes
-                            publish(HA_TOPIC + 'alarms/alarm_2/state', payload=bool2payload[alarm_2_state])
+                            publish(HA_TOPIC + 'alarms/alarm_2/state', payload=bool2payload[device_state and alarm_2_state])
                             publish(HA_TOPIC + 'alarms/alarm_2/time_hour', payload='%d' % (alarm_2_time // 60))
                             publish(HA_TOPIC + 'alarms/alarm_2/time_minute', payload='%d' % (alarm_2_time % 60))
                             publish(HA_TOPIC + 'alarms/alarm_2/brightness', payload='%d' % alarm_2_brightness)
@@ -384,7 +406,7 @@ def on_message(client, userdata, msg):
                             alarm_3_sound = int(alarm_3_settings[10:12], 16) # 0 to all
                             alarm_3_volume = int(alarm_3_settings[12:14], 16) # 1 to 15
                             alarm_3_snooze = int(alarm_3_settings[14:16], 16) # minutes
-                            publish(HA_TOPIC + 'alarms/alarm_3/state', payload=bool2payload[alarm_3_state])
+                            publish(HA_TOPIC + 'alarms/alarm_3/state', payload=bool2payload[device_state and alarm_3_state])
                             publish(HA_TOPIC + 'alarms/alarm_3/time_hour', payload='%d' % (alarm_3_time // 60))
                             publish(HA_TOPIC + 'alarms/alarm_3/time_minute', payload='%d' % (alarm_3_time % 60))
                             publish(HA_TOPIC + 'alarms/alarm_3/brightness', payload='%d' % alarm_3_brightness)
@@ -407,7 +429,7 @@ def on_message(client, userdata, msg):
                             alarm_4_sound = int(alarm_4_settings[10:12], 16) # 0 to all
                             alarm_4_volume = int(alarm_4_settings[12:14], 16) # 1 to 15
                             alarm_4_snooze = int(alarm_4_settings[14:16], 16) # minutes
-                            publish(HA_TOPIC + 'alarms/alarm_4/state', payload=bool2payload[alarm_4_state])
+                            publish(HA_TOPIC + 'alarms/alarm_4/state', payload=bool2payload[device_state and alarm_4_state])
                             publish(HA_TOPIC + 'alarms/alarm_4/time_hour', payload='%d' % (alarm_4_time // 60))
                             publish(HA_TOPIC + 'alarms/alarm_4/time_minute', payload='%d' % (alarm_4_time % 60))
                             publish(HA_TOPIC + 'alarms/alarm_4/brightness', payload='%d' % alarm_4_brightness)
@@ -431,7 +453,7 @@ def on_message(client, userdata, msg):
                             sleep_light_settings = DpIdData[12:34]
 
                             publish(HA_TOPIC + 'sleep/state', payload=bool2payload[sleep_state])
-
+                            
                             # Sleep Timer
                             sleep_time_minutes = int(sleep_time_settings[0:2], 16)
                             sleep_time_seconds = int(sleep_time_settings[2:4], 16)
@@ -442,7 +464,7 @@ def on_message(client, userdata, msg):
                             sleep_sound_state = hex2bool[sleep_sound_settings[0:2]]
                             sleep_sound_effect = int(sleep_sound_settings[2:4], 16)
                             sleep_sound_volume = int(sleep_sound_settings[4:6], 16) # 1 to 15
-                            publish(HA_TOPIC + 'sleep/sound/state', payload=bool2payload[device_state and sleep_sound_state])
+                            publish(HA_TOPIC + 'sleep/sound/state', payload=bool2payload[sleep_sound_state])
                             publish(HA_TOPIC + 'sleep/sound/effect', payload=sound_effect_types[sleep_sound_effect])
                             publish(HA_TOPIC + 'sleep/sound/volume', payload='%d' % sleep_sound_volume) # scale 15
 
@@ -457,17 +479,17 @@ def on_message(client, userdata, msg):
                             sleep_effect_light_state = hex2bool[sleep_light_settings[16:18]]
                             sleep_effect_light_brightness = int(sleep_light_settings[18:20],16)
                             sleep_effect_light_effect = int(sleep_light_settings[20:22],16)
-                            publish(HA_TOPIC + 'sleep/white/state', payload=bool2payload[device_state and sleep_light_state and sleep_white_light_state])
+                            publish(HA_TOPIC + 'sleep/white/state', payload=bool2payload[sleep_light_state and sleep_white_light_state])
                             publish(HA_TOPIC + 'sleep/white/brightness', payload='%d' % sleep_white_light_brightness) # scale 20
                             publish(HA_TOPIC + 'sleep/white/color_temp', payload='%d' % sleep_white_light_temperature) # mireds, already adjusted calculation
-                            publish(HA_TOPIC + 'sleep/color/state', payload=bool2payload[device_state and sleep_light_state and sleep_color_light_state])
+                            publish(HA_TOPIC + 'sleep/color/state', payload=bool2payload[sleep_light_state and sleep_color_light_state])
                             publish(HA_TOPIC + 'sleep/color/brightness', payload='%d' % sleep_color_light_brightness) # scale 20
                             publish(HA_TOPIC + 'sleep/color/hs', payload='%d,100' % sleep_color_light_hue)
-                            publish(HA_TOPIC + 'sleep/effect/state', payload=bool2payload[device_state and sleep_light_state and sleep_effect_light_state])
+                            publish(HA_TOPIC + 'sleep/effect/state', payload=bool2payload[sleep_light_state and sleep_effect_light_state])
                             publish(HA_TOPIC + 'sleep/effect/brightness', payload='%d' % sleep_effect_light_brightness) # scale 20
                             publish(HA_TOPIC + 'sleep/effect/effect', payload=light_effect_types[sleep_effect_light_effect])
 
-                            # Sync the related DPIDs for Kicks
+                            # # Sync the related DPIDs for Kicks
                             pubcom('SerialSend5', payload=tuya_payload_raw(111, sleep_time_settings))
                             pubcom('SerialSend5', payload=tuya_payload_raw(112, sleep_sound_settings))
                             pubcom('SerialSend5', payload=tuya_payload_raw(113, sleep_light_settings))
@@ -497,7 +519,9 @@ def on_message(client, userdata, msg):
                             if logging: publog('Intentionally Unhandled: %s' % str(datapoint))
 
                         else:
-                            if logging: publog(str(datapoint))
+                            pass
+                            # if logging: publog(str(datapoint))
+                        if logging: publog(str(datapoint))
 
             else:
                 publog('unhandled: ' + str(tuya_rec_dict))
@@ -507,15 +531,398 @@ def on_message(client, userdata, msg):
 
     # HA's _set Topics
 
-    # # HA Setting DPID 2 - Color Light State (bool)
-    # elif msg.topic == HA_TOPIC + 'color/state_set':
-    #     if payload_str == 'ON':
-    #         if logging: publog('HA: Turn Color Light On')
-    #         if not color_light_state: pubcom('TuyaSend1', payload='2,1')
-    #     else:
-    #         if logging: publog('HA: Turn Color Light Off')
-    #         if color_light_state: pubcom('TuyaSend1', payload='2,0')
+    elif msg.topic == HA_TOPIC + 'device/state' + '_set':
+        if payload_str == 'ON':
+            if not device_state: pubcom('TuyaSend1', payload='20,1')
+        else:
+            if device_state: pubcom('TuyaSend1', payload='20,0')
 
+    elif msg.topic == HA_TOPIC + 'white/state' + '_set':
+        if payload_str == 'ON':
+            if not device_state: pubcom('TuyaSend1', payload='20,1')
+            if not (light_state and white_light_state): pubcom('SerialSend5', payload=tuya_payload_raw(103,'01' + '01' + light_settings[4:8] + '00' + light_settings[10:16] + '00' + light_settings[18:22]))
+        else:
+            if light_state: pubcom('SerialSend5', payload=tuya_payload_raw(103,'00' + light_settings[2:22]))
+
+    elif msg.topic == HA_TOPIC + 'white/brightness' + '_set':
+        pubcom('SerialSend5', payload=tuya_payload_raw(103,light_settings[0:4] + ('%02X' % int(payload_str)) + light_settings[6:22]))
+
+    elif msg.topic == HA_TOPIC + 'white/color_temp' + '_set':
+        temp = int((50000 - 100*float(payload_str)) // 347)
+        pubcom('SerialSend5', payload=tuya_payload_raw(103,light_settings[0:6] + ('%02X' % temp) + light_settings[8:22]))
+
+    elif msg.topic == HA_TOPIC + 'color/state' + '_set':
+        if payload_str == 'ON':
+            if not device_state: pubcom('TuyaSend1', payload='20,1')
+            if not (light_state and color_light_state): pubcom('SerialSend5', payload=tuya_payload_raw(103,'01' + '00' + light_settings[4:8] + '01' + light_settings[10:16] + '00' + light_settings[18:22]))
+        else:
+            if light_state: pubcom('SerialSend5', payload=tuya_payload_raw(103,'00' + light_settings[2:22]))
+
+    elif msg.topic == HA_TOPIC + 'color/brightness' + '_set':
+        pubcom('SerialSend5', payload=tuya_payload_raw(103,light_settings[0:10] + ('%02X' % int(payload_str)) + light_settings[12:22]))
+
+    elif msg.topic == HA_TOPIC + 'color/hs' + '_set':
+        temp = int(float(payload_str.split(',')[0]))
+        pubcom('SerialSend5', payload=tuya_payload_raw(103,light_settings[0:12] + ('%04X' % temp) + light_settings[16:22]))
+
+    elif msg.topic == HA_TOPIC + 'effect/state' + '_set':
+        if payload_str == 'ON':
+            if not device_state: pubcom('TuyaSend1', payload='20,1')
+            if not (light_state and effect_light_state): pubcom('SerialSend5', payload=tuya_payload_raw(103,'01' + '00' + light_settings[4:8] + '00' + light_settings[10:16] + '01' + light_settings[18:22]))
+        else:
+            if light_state: pubcom('SerialSend5', payload=tuya_payload_raw(103,'00' + light_settings[2:22]))
+
+    elif msg.topic == HA_TOPIC + 'effect/brightness' + '_set':
+        pubcom('SerialSend5', payload=tuya_payload_raw(103,light_settings[0:18] + ('%02X' % int(payload_str)) + light_settings[20:22]))
+
+    elif msg.topic == HA_TOPIC + 'effect/effect' + '_set':
+        pubcom('SerialSend5', payload=tuya_payload_raw(103,light_settings[0:20] + ('%02X' % inv_light_effect_types[payload_str])))
+
+    elif msg.topic == HA_TOPIC + 'sound/state' + '_set':
+        if payload_str == 'ON':
+            if not device_state: pubcom('TuyaSend1', payload='20,1')
+            if not sound_state: pubcom('SerialSend5', payload=tuya_payload_raw(104,'01' + sound_settings[2:8]))
+        else:
+            if sound_state: pubcom('SerialSend5', payload=tuya_payload_raw(104,'00' + sound_settings[2:8]))
+
+    elif msg.topic == HA_TOPIC + 'sound/effect' + '_set':
+        pubcom('SerialSend5', payload=tuya_payload_raw(104,sound_settings[0:2] + ('%02X' % inv_sound_effect_types[payload_str]) + sound_settings[4:8]))
+
+    elif msg.topic == HA_TOPIC + 'sound/volume' + '_set':
+        pubcom('SerialSend5', payload=tuya_payload_raw(104,sound_settings[0:4] + ('%02X' % int(payload_str)) + sound_settings[6:8]))
+
+    elif msg.topic == HA_TOPIC + 'sound/timer' + '_set':
+        pubcom('SerialSend5', payload=tuya_payload_raw(104,sound_settings[0:6] + ('%02X' % int(payload_str))))
+
+    # Alarm 1
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_1/state' + '_set':
+        if payload_str == 'ON':
+            if not device_state: pubcom('TuyaSend1', payload='20,1')
+            if not alarm_1_state: pubcom('SerialSend5', payload=tuya_payload_raw(101,'01' + alarm_1_settings[2:16] + alarm_2_settings + alarm_3_settings + alarm_4_settings))
+        else:
+            if alarm_1_state: pubcom('SerialSend5', payload=tuya_payload_raw(101,'00' + alarm_1_settings[2:16] + alarm_2_settings + alarm_3_settings + alarm_4_settings))
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_1/time_hour' + '_set':
+        temp = 60*int(payload_str) + (alarm_1_time % 60)
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings[0:2] + ('%04X' % temp) + alarm_1_settings[6:16] + alarm_2_settings + alarm_3_settings + alarm_4_settings))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_1/time_minute' + '_set':
+        temp = int(payload_str) + 60*(alarm_1_time // 60)
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings[0:2] + ('%04X' % temp) + alarm_1_settings[6:16] + alarm_2_settings + alarm_3_settings + alarm_4_settings))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_1/brightness' + '_set':
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings[0:6] + ('%02X' % int(payload_str)) + alarm_1_settings[8:16] + alarm_2_settings + alarm_3_settings + alarm_4_settings))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_1/sun' + '_set':
+        temp = str(inv_binary_payload[payload_str]) + alarm_1_days[1:]
+        raw_str = alarm_1_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_1_settings[10:16] + alarm_2_settings + alarm_3_settings + alarm_4_settings
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_1/mon' + '_set':
+        temp = alarm_1_days[0:1] + str(inv_binary_payload[payload_str]) + alarm_1_days[2:]
+        raw_str = alarm_1_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_1_settings[10:16] + alarm_2_settings + alarm_3_settings + alarm_4_settings
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_1/tue' + '_set':
+        temp = alarm_1_days[0:2] + str(inv_binary_payload[payload_str]) + alarm_1_days[3:]
+        raw_str = alarm_1_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_1_settings[10:16] + alarm_2_settings + alarm_3_settings + alarm_4_settings
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_1/wed' + '_set':
+        temp = alarm_1_days[0:3] + str(inv_binary_payload[payload_str]) + alarm_1_days[4:]
+        raw_str = alarm_1_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_1_settings[10:16] + alarm_2_settings + alarm_3_settings + alarm_4_settings
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_1/thu' + '_set':
+        temp = alarm_1_days[0:4] + str(inv_binary_payload[payload_str]) + alarm_1_days[5:]
+        raw_str = alarm_1_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_1_settings[10:16] + alarm_2_settings + alarm_3_settings + alarm_4_settings
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_1/fri' + '_set':
+        temp = alarm_1_days[0:5] + str(inv_binary_payload[payload_str]) + alarm_1_days[6:]
+        raw_str = alarm_1_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_1_settings[10:16] + alarm_2_settings + alarm_3_settings + alarm_4_settings
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_1/sat' + '_set':
+        temp = alarm_1_days[0:6] + str(inv_binary_payload[payload_str])
+        raw_str = alarm_1_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_1_settings[10:16] + alarm_2_settings + alarm_3_settings + alarm_4_settings
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_1/sound' + '_set':
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings[0:10] + ('%02X' % inv_sound_effect_types[payload_str]) + alarm_1_settings[12:16] + alarm_2_settings + alarm_3_settings + alarm_4_settings))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_1/volume' + '_set':
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings[0:12] + ('%02X' % int(payload_str)) + alarm_1_settings[14:16] + alarm_2_settings + alarm_3_settings + alarm_4_settings))
+
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_1/snooze' + '_set':
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings[0:14] + ('%02X' % int(payload_str)) + alarm_2_settings + alarm_3_settings + alarm_4_settings))
+
+    # Alarm 2
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_2/state' + '_set':
+        if payload_str == 'ON':
+            if not device_state: pubcom('TuyaSend1', payload='20,1')
+            if not alarm_2_state: pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings + '01' + alarm_2_settings[2:16] + alarm_3_settings + alarm_4_settings))
+        else:
+            if alarm_2_state: pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings + '00' + alarm_2_settings[2:16] + alarm_3_settings + alarm_4_settings))
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_2/time_hour' + '_set':
+        temp = 60*int(payload_str) + (alarm_2_time % 60)
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings + alarm_2_settings[0:2] + ('%04X' % temp) + alarm_2_settings[6:16] + alarm_3_settings + alarm_4_settings))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_2/time_minute' + '_set':
+        temp = int(payload_str) + 60*(alarm_2_time // 60)
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings + alarm_2_settings[0:2] + ('%04X' % temp) + alarm_2_settings[6:16] + alarm_3_settings + alarm_4_settings))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_2/brightness' + '_set':
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings + alarm_2_settings[0:6] + ('%02X' % int(payload_str)) + alarm_2_settings[8:16] + alarm_3_settings + alarm_4_settings))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_2/sun' + '_set':
+        temp = str(inv_binary_payload[payload_str]) + alarm_2_days[1:]
+        raw_str = alarm_1_settings + alarm_2_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_2_settings[10:16] + alarm_3_settings + alarm_4_settings
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_2/mon' + '_set':
+        temp = alarm_2_days[0:1] + str(inv_binary_payload[payload_str]) + alarm_2_days[2:]
+        raw_str = alarm_1_settings + alarm_2_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_2_settings[10:16] + alarm_3_settings + alarm_4_settings
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_2/tue' + '_set':
+        temp = alarm_2_days[0:2] + str(inv_binary_payload[payload_str]) + alarm_2_days[3:]
+        raw_str = alarm_1_settings + alarm_2_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_2_settings[10:16] + alarm_3_settings + alarm_4_settings
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_2/wed' + '_set':
+        temp = alarm_2_days[0:3] + str(inv_binary_payload[payload_str]) + alarm_2_days[4:]
+        raw_str = alarm_1_settings + alarm_2_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_2_settings[10:16] + alarm_3_settings + alarm_4_settings
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_2/thu' + '_set':
+        temp = alarm_2_days[0:4] + str(inv_binary_payload[payload_str]) + alarm_2_days[5:]
+        raw_str = alarm_1_settings + alarm_2_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_2_settings[10:16] + alarm_3_settings + alarm_4_settings
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_2/fri' + '_set':
+        temp = alarm_2_days[0:5] + str(inv_binary_payload[payload_str]) + alarm_2_days[6:]
+        raw_str = alarm_1_settings + alarm_2_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_2_settings[10:16] + alarm_3_settings + alarm_4_settings
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_2/sat' + '_set':
+        temp = alarm_2_days[0:6] + str(inv_binary_payload[payload_str])
+        raw_str = alarm_1_settings + alarm_2_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_2_settings[10:16] + alarm_3_settings + alarm_4_settings
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_2/sound' + '_set':
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings + alarm_2_settings[0:10] + ('%02X' % inv_sound_effect_types[payload_str]) + alarm_2_settings[12:16] + alarm_3_settings + alarm_4_settings))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_2/volume' + '_set':
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings + alarm_2_settings[0:12] + ('%02X' % int(payload_str)) + alarm_2_settings[14:16] + alarm_3_settings + alarm_4_settings))
+
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_2/snooze' + '_set':
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings + alarm_2_settings[0:14] + ('%02X' % int(payload_str)) + alarm_3_settings + alarm_4_settings))
+
+    # Alarm 3
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_3/state' + '_set':
+        if payload_str == 'ON':
+            if not device_state: pubcom('TuyaSend1', payload='20,1')
+            if not alarm_3_state: pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings + alarm_2_settings + '01' + alarm_3_settings[2:16] + alarm_4_settings))
+        else:
+            if alarm_3_state: pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings + alarm_2_settings + '00' + alarm_3_settings[2:16] + alarm_4_settings))
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_3/time_hour' + '_set':
+        temp = 60*int(payload_str) + (alarm_3_time % 60)
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings + alarm_2_settings + alarm_3_settings[0:2] + ('%04X' % temp) + alarm_3_settings[6:16] + alarm_4_settings))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_3/time_minute' + '_set':
+        temp = int(payload_str) + 60*(alarm_3_time // 60)
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings + alarm_2_settings + alarm_3_settings[0:2] + ('%04X' % temp) + alarm_3_settings[6:16] + alarm_4_settings))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_3/brightness' + '_set':
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings + alarm_2_settings + alarm_3_settings[0:6] + ('%02X' % int(payload_str)) + alarm_3_settings[8:16] + alarm_4_settings))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_3/sun' + '_set':
+        temp = str(inv_binary_payload[payload_str]) + alarm_3_days[1:]
+        raw_str = alarm_1_settings + alarm_2_settings + alarm_3_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_3_settings[10:16] + alarm_4_settings
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_3/mon' + '_set':
+        temp = alarm_3_days[0:1] + str(inv_binary_payload[payload_str]) + alarm_3_days[2:]
+        raw_str = alarm_1_settings + alarm_2_settings + alarm_3_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_3_settings[10:16] + alarm_4_settings
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_3/tue' + '_set':
+        temp = alarm_3_days[0:2] + str(inv_binary_payload[payload_str]) + alarm_3_days[3:]
+        raw_str = alarm_1_settings + alarm_2_settings + alarm_3_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_3_settings[10:16] + alarm_4_settings
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_3/wed' + '_set':
+        temp = alarm_3_days[0:3] + str(inv_binary_payload[payload_str]) + alarm_3_days[4:]
+        raw_str = alarm_1_settings + alarm_2_settings + alarm_3_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_3_settings[10:16] + alarm_4_settings
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_3/thu' + '_set':
+        temp = alarm_3_days[0:4] + str(inv_binary_payload[payload_str]) + alarm_3_days[5:]
+        raw_str = alarm_1_settings + alarm_2_settings + alarm_3_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_3_settings[10:16] + alarm_4_settings
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_3/fri' + '_set':
+        temp = alarm_3_days[0:5] + str(inv_binary_payload[payload_str]) + alarm_3_days[6:]
+        raw_str = alarm_1_settings + alarm_2_settings + alarm_3_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_3_settings[10:16] + alarm_4_settings
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_3/sat' + '_set':
+        temp = alarm_3_days[0:6] + str(inv_binary_payload[payload_str])
+        raw_str = alarm_1_settings + alarm_2_settings + alarm_3_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_3_settings[10:16] + alarm_4_settings
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_3/sound' + '_set':
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings + alarm_2_settings + alarm_3_settings[0:10] + ('%02X' % inv_sound_effect_types[payload_str]) + alarm_3_settings[12:16] + alarm_4_settings))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_3/volume' + '_set':
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings + alarm_2_settings + alarm_3_settings[0:12] + ('%02X' % int(payload_str)) + alarm_3_settings[14:16] + alarm_4_settings))
+
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_3/snooze' + '_set':
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings + alarm_2_settings + alarm_3_settings[0:14] + ('%02X' % int(payload_str)) + alarm_4_settings))
+
+    # Alarm 4
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_4/state' + '_set':
+        if payload_str == 'ON':
+            if not device_state: pubcom('TuyaSend1', payload='20,1')
+            if not alarm_4_state: pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings + alarm_2_settings + alarm_3_settings + '01' + alarm_4_settings[2:16] ))
+        else:
+            if alarm_4_state: pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings + alarm_2_settings + alarm_3_settings + '00' + alarm_4_settings[2:16] ))
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_4/time_hour' + '_set':
+        temp = 60*int(payload_str) + (alarm_4_time % 60)
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings + alarm_2_settings + alarm_3_settings + alarm_4_settings[0:2] + ('%04X' % temp) + alarm_4_settings[6:16] ))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_4/time_minute' + '_set':
+        temp = int(payload_str) + 60*(alarm_4_time // 60)
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings + alarm_2_settings + alarm_3_settings + alarm_4_settings[0:2] + ('%04X' % temp) + alarm_4_settings[6:16] ))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_4/brightness' + '_set':
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings + alarm_2_settings + alarm_3_settings + alarm_4_settings[0:6] + ('%02X' % int(payload_str)) + alarm_4_settings[8:16] ))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_4/sun' + '_set':
+        temp = str(inv_binary_payload[payload_str]) + alarm_4_days[1:]
+        raw_str = alarm_1_settings + alarm_2_settings + alarm_3_settings + alarm_4_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_4_settings[10:16] 
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_4/mon' + '_set':
+        temp = alarm_4_days[0:1] + str(inv_binary_payload[payload_str]) + alarm_4_days[2:]
+        raw_str = alarm_1_settings + alarm_2_settings + alarm_3_settings + alarm_4_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_4_settings[10:16] 
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_4/tue' + '_set':
+        temp = alarm_4_days[0:2] + str(inv_binary_payload[payload_str]) + alarm_4_days[3:]
+        raw_str = alarm_1_settings + alarm_2_settings + alarm_3_settings + alarm_4_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_4_settings[10:16] 
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_4/wed' + '_set':
+        temp = alarm_4_days[0:3] + str(inv_binary_payload[payload_str]) + alarm_4_days[4:]
+        raw_str = alarm_1_settings + alarm_2_settings + alarm_3_settings + alarm_4_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_4_settings[10:16] 
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_4/thu' + '_set':
+        temp = alarm_4_days[0:4] + str(inv_binary_payload[payload_str]) + alarm_4_days[5:]
+        raw_str = alarm_1_settings + alarm_2_settings + alarm_3_settings + alarm_4_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_4_settings[10:16] 
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_4/fri' + '_set':
+        temp = alarm_4_days[0:5] + str(inv_binary_payload[payload_str]) + alarm_4_days[6:]
+        raw_str = alarm_1_settings + alarm_2_settings + alarm_3_settings + alarm_4_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_4_settings[10:16] 
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_4/sat' + '_set':
+        temp = alarm_4_days[0:6] + str(inv_binary_payload[payload_str])
+        raw_str = alarm_1_settings + alarm_2_settings + alarm_3_settings + alarm_4_settings[0:8] + ('%02X' % int(temp, 2)) + alarm_4_settings[10:16] 
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,raw_str))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_4/sound' + '_set':
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings + alarm_2_settings + alarm_3_settings + alarm_4_settings[0:10] + ('%02X' % inv_sound_effect_types[payload_str]) + alarm_4_settings[12:16] ))
+    
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_4/volume' + '_set':
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings + alarm_2_settings + alarm_3_settings + alarm_4_settings[0:12] + ('%02X' % int(payload_str)) + alarm_4_settings[14:16] ))
+
+    elif msg.topic == HA_TOPIC + 'alarms/alarm_4/snooze' + '_set':
+        pubcom('SerialSend5', payload=tuya_payload_raw(101,alarm_1_settings + alarm_2_settings + alarm_3_settings + alarm_4_settings[0:14] + ('%02X' % int(payload_str)) ))
+
+    elif msg.topic == HA_TOPIC + 'sleep/state' + '_set':
+        if payload_str == 'ON':
+            if not device_state: pubcom('TuyaSend1', payload='20,1')
+            if not sleep_state: pubcom('SerialSend5', payload=tuya_payload_raw(102,sleep_time_settings + '01' + sleep_sound_settings + sleep_light_settings))
+        else:
+            if sleep_state: pubcom('SerialSend5', payload=tuya_payload_raw(102,sleep_settings[0:4] + '00' + sleep_settings[6:]))
+
+    elif msg.topic == HA_TOPIC + 'sleep/time_minutes' + '_set':
+        new_sleep_time_settings = '%02X' % max(1, int(payload_str)) + sleep_time_settings[2:4]
+        # pubcom('SerialSend5', payload=tuya_payload_raw(111, new_sleep_time_settings))
+        pubcom('SerialSend5', payload=tuya_payload_raw(102, new_sleep_time_settings + bool2hex[sleep_state] + sleep_sound_settings + sleep_light_settings))
+        
+    elif msg.topic == HA_TOPIC + 'sleep/time_seconds' + '_set':
+        new_sleep_time_settings = sleep_time_settings[0:2] + '%02X' % int(payload_str)
+        # pubcom('SerialSend5', payload=tuya_payload_raw(111, new_sleep_time_settings))
+        pubcom('SerialSend5', payload=tuya_payload_raw(102, new_sleep_time_settings + bool2hex[sleep_state] + sleep_sound_settings + sleep_light_settings))
+
+    elif msg.topic == HA_TOPIC + 'sleep/sound/state' + '_set':
+        new_sleep_sound_settings = payload2hex[payload_str] + sleep_sound_settings[2:6]
+        if payload_str == 'ON':
+            if not sleep_sound_state: pubcom('SerialSend5', payload=tuya_payload_raw(102, sleep_time_settings + bool2hex[sleep_state] + new_sleep_sound_settings + sleep_light_settings))
+        else:
+            if sleep_sound_state: pubcom('SerialSend5', payload=tuya_payload_raw(102, sleep_time_settings + bool2hex[sleep_state] + new_sleep_sound_settings + sleep_light_settings))
+
+    elif msg.topic == HA_TOPIC + 'sleep/sound/effect' + '_set':
+        new_sleep_sound_settings = sleep_sound_settings[0:2] + ('%02X' % inv_sound_effect_types[payload_str]) + sleep_sound_settings[4:6]
+        pubcom('SerialSend5', payload=tuya_payload_raw(102, sleep_time_settings + bool2hex[sleep_state] + new_sleep_sound_settings + sleep_light_settings))
+    
+    elif msg.topic == HA_TOPIC + 'sleep/sound/volume' + '_set':
+        new_sleep_sound_settings = sleep_sound_settings[0:4] + ('%02X' % int(payload_str))
+        pubcom('SerialSend5', payload=tuya_payload_raw(102, sleep_time_settings + bool2hex[sleep_state] + new_sleep_sound_settings + sleep_light_settings))
+
+    elif msg.topic == HA_TOPIC + 'sleep/white/state' + '_set':
+        if payload_str == 'ON':
+            new_sleep_light_settings = '01' + '01' + sleep_light_settings[4:8] + '00' + sleep_light_settings[10:16] + '00' + sleep_light_settings[18:22]
+            if not (sleep_light_state and sleep_white_light_state): pubcom('SerialSend5', payload=tuya_payload_raw(102, sleep_time_settings + bool2hex[sleep_state] + sleep_sound_settings + new_sleep_light_settings))
+        else:
+            new_sleep_light_settings = '00' + '01' + sleep_light_settings[4:8] + '00' + sleep_light_settings[10:16] + '00' + sleep_light_settings[18:22]
+            if sleep_light_state: pubcom('SerialSend5', payload=tuya_payload_raw(102, sleep_time_settings + bool2hex[sleep_state] + sleep_sound_settings + new_sleep_light_settings))
+
+    elif msg.topic == HA_TOPIC + 'sleep/white/brightness' + '_set':
+        new_sleep_light_settings = sleep_light_settings[0:4] + ('%02X' % int(payload_str)) + sleep_light_settings[6:22]
+        pubcom('SerialSend5', payload=tuya_payload_raw(102, sleep_time_settings + bool2hex[sleep_state] + sleep_sound_settings + new_sleep_light_settings))
+
+    elif msg.topic == HA_TOPIC + 'sleep/white/color_temp' + '_set':
+        temp = int((50000 - 100*float(payload_str)) // 347)
+        new_sleep_light_settings = sleep_light_settings[0:6] + ('%02X' % int(temp)) + sleep_light_settings[8:22]
+        pubcom('SerialSend5', payload=tuya_payload_raw(102, sleep_time_settings + bool2hex[sleep_state] + sleep_sound_settings + new_sleep_light_settings))
+
+    elif msg.topic == HA_TOPIC + 'sleep/color/state' + '_set':
+        if payload_str == 'ON':
+            new_sleep_light_settings = '01' + '00' + sleep_light_settings[4:8] + '01' + sleep_light_settings[10:16] + '00' + sleep_light_settings[18:22]
+            if not (sleep_light_state and sleep_color_light_state): pubcom('SerialSend5', payload=tuya_payload_raw(102, sleep_time_settings + bool2hex[sleep_state] + sleep_sound_settings + new_sleep_light_settings))
+        else:
+            new_sleep_light_settings = '00' + '00' + sleep_light_settings[4:8] + '01' + sleep_light_settings[10:16] + '00' + sleep_light_settings[18:22]
+            if sleep_light_state: pubcom('SerialSend5', payload=tuya_payload_raw(102, sleep_time_settings + bool2hex[sleep_state] + sleep_sound_settings + new_sleep_light_settings))
+
+    elif msg.topic == HA_TOPIC + 'sleep/color/brightness' + '_set':
+        new_sleep_light_settings = sleep_light_settings[0:10] + ('%02X' % int(payload_str)) + sleep_light_settings[12:22]
+        pubcom('SerialSend5', payload=tuya_payload_raw(102, sleep_time_settings + bool2hex[sleep_state] + sleep_sound_settings + new_sleep_light_settings))
+
+    elif msg.topic == HA_TOPIC + 'sleep/color/hs' + '_set':
+        temp = int(float(payload_str.split(',')[0]))
+        new_sleep_light_settings = sleep_light_settings[0:12] + ('%04X' % temp) + sleep_light_settings[16:22]
+        pubcom('SerialSend5', payload=tuya_payload_raw(102, sleep_time_settings + bool2hex[sleep_state] + sleep_sound_settings + new_sleep_light_settings))
+
+    elif msg.topic == HA_TOPIC + 'sleep/effect/state' + '_set':
+        if payload_str == 'ON':
+            new_sleep_light_settings = '01' + '00' + sleep_light_settings[4:8] + '00' + sleep_light_settings[10:16] + '01' + sleep_light_settings[18:22]
+            if not (sleep_light_state and sleep_effect_light_state): pubcom('SerialSend5', payload=tuya_payload_raw(102, sleep_time_settings + bool2hex[sleep_state] + sleep_sound_settings + new_sleep_light_settings))
+        else:
+            new_sleep_light_settings = '00' + '00' + sleep_light_settings[4:8] + '00' + sleep_light_settings[10:16] + '01' + sleep_light_settings[18:22]
+            if sleep_light_state: pubcom('SerialSend5', payload=tuya_payload_raw(102, sleep_time_settings + bool2hex[sleep_state] + sleep_sound_settings + new_sleep_light_settings))
+
+    elif msg.topic == HA_TOPIC + 'sleep/effect/brightness' + '_set':
+        new_sleep_light_settings = sleep_light_settings[0:18] + ('%02X' % int(payload_str)) + sleep_light_settings[20:22]
+        pubcom('SerialSend5', payload=tuya_payload_raw(102, sleep_time_settings + bool2hex[sleep_state] + sleep_sound_settings + new_sleep_light_settings))
+
+    elif msg.topic == HA_TOPIC + 'sleep/effect/effect' + '_set':
+        new_sleep_light_settings = sleep_light_settings[0:20] + ('%02X' % inv_light_effect_types[payload_str]) 
+        pubcom('SerialSend5', payload=tuya_payload_raw(102, sleep_time_settings + bool2hex[sleep_state] + sleep_sound_settings + new_sleep_light_settings))
 
 client = mqtt.Client(MQTT_CLIENT)
 client.username_pw_set(MQTT_USER , MQTT_PASSWORD)
