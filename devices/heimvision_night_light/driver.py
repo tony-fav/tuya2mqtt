@@ -2,17 +2,17 @@ import os
 import json
 import paho.mqtt.client as mqtt
 
-# MQTT_HOST = os.getenv('MQTT_HOST')
-# MQTT_PORT = int(os.getenv('MQTT_PORT', 1883))
-# MQTT_USER = os.getenv('MQTT_USER')
-# MQTT_PASSWORD = os.getenv('MQTT_PASSWORD')
-# MQTT_CLIENT = os.getenv('MQTT_CLIENT', 't2t2m2p2m2ha-heimvision_night_light')
-# MQTT_QOS = int(os.getenv('MQTT_QOS', 1))
-# DEVICE_TOPIC = os.getenv('DEVICE_TOPIC', 'tasmota_XXXXXX')
-# DEVICE_TYPE= os.getenv('DEVICE_TYPE')
-# HA_TOPIC = os.getenv('HA_TOPIC', 't2t2m2p2m2ha/heimvision_night_light/')
+MQTT_HOST = os.getenv('MQTT_HOST')
+MQTT_PORT = int(os.getenv('MQTT_PORT', 1883))
+MQTT_USER = os.getenv('MQTT_USER')
+MQTT_PASSWORD = os.getenv('MQTT_PASSWORD')
+MQTT_CLIENT = os.getenv('MQTT_CLIENT', 't2t2m2p2m2ha-heimvision_night_light')
+MQTT_QOS = int(os.getenv('MQTT_QOS', 1))
+DEVICE_TOPIC = os.getenv('DEVICE_TOPIC', 'tasmota_XXXXXX')
+DEVICE_TYPE= os.getenv('DEVICE_TYPE')
+HA_TOPIC = os.getenv('HA_TOPIC', 't2t2m2p2m2ha/heimvision_night_light/')
 
-from secrets import MQTT_HOST, MQTT_PORT, MQTT_USER, MQTT_PASSWORD, MQTT_CLIENT, MQTT_QOS, DEVICE_TOPIC, DEVICE_TYPE, HA_TOPIC
+# from secrets import MQTT_HOST, MQTT_PORT, MQTT_USER, MQTT_PASSWORD, MQTT_CLIENT, MQTT_QOS, DEVICE_TOPIC, DEVICE_TYPE, HA_TOPIC
 
 assert DEVICE_TYPE.lower() == 'heimvision_night_light'
 
