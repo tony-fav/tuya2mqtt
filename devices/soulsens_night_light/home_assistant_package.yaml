@@ -1,0 +1,686 @@
+light:
+  - platform: mqtt
+    name: "personAs NL White Light"
+    icon: mdi:weather-sunny
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/white/state"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/white/state_set"
+    brightness_state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/white/brightness"
+    brightness_command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/white/brightness_set"
+    brightness_scale: 20
+    color_temp_state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/white/color_temp"
+    color_temp_command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/white/color_temp_set"
+
+  - platform: mqtt
+    name: "personAs NL Color Light"
+    icon: mdi:palette
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/color/state"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/color/state_set"
+    brightness_state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/color/brightness"
+    brightness_command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/color/brightness_set"
+    brightness_scale: 20
+    hs_state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/color/hs"
+    hs_command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/color/hs_set"
+
+  - platform: mqtt
+    name: "personAs NL Effect Light"
+    icon: mdi:flare
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/effect/state"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/effect/state_set"
+    brightness_state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/effect/brightness"
+    brightness_command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/effect/brightness_set"
+    brightness_scale: 20
+    effect_state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/effect/effect"
+    effect_command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/effect/effect_set"
+    effect_list:
+      - "Breathe"
+      - "Leap"
+      - "Sunset"
+      - "Candle"
+
+  - platform: mqtt
+    name: "personAs NL Sound"
+    icon: mdi:music-note-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sound/state"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sound/state_set"
+    brightness_state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sound/volume"
+    brightness_command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sound/volume_set"
+    brightness_scale: 15
+    effect_state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sound/effect"
+    effect_command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sound/effect_set"
+    effect_list:
+      - "Ocean"
+      - "Thunder"
+      - "Rain"
+      - "Stream"
+      - "Rainforest"
+      - "Wind"
+      - "Deep space"
+      - "Bird"
+      - "Cricket"
+      - "Whale"
+      - "White Noise"
+      - "Pink Noise"
+      - "Fan"
+      - "Hairdryer"
+      - "Lullaby"
+      - "Piano"
+      - "Wind Chimes"
+
+  - platform: mqtt
+    name: "personAs NL Sleep White Light"
+    icon: mdi:weather-sunny
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/white/state"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/white/state_set"
+    brightness_state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/white/brightness"
+    brightness_command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/white/brightness_set"
+    brightness_scale: 20
+    color_temp_state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/white/color_temp"
+    color_temp_command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/white/color_temp_set"
+
+  - platform: mqtt
+    name: "personAs NL Sleep Color Light"
+    icon: mdi:palette
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/color/state"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/color/state_set"
+    brightness_state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/color/brightness"
+    brightness_command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/color/brightness_set"
+    brightness_scale: 20
+    hs_state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/color/hs"
+    hs_command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/color/hs_set"
+
+  - platform: mqtt
+    name: "personAs NL Sleep Effect Light"
+    icon: mdi:flare
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/effect/state"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/effect/state_set"
+    brightness_state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/effect/brightness"
+    brightness_command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/effect/brightness_set"
+    brightness_scale: 20
+    effect_state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/effect/effect"
+    effect_command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/effect/effect_set"
+    effect_list:
+      - "Breathe"
+      - "Leap"
+      - "Sunset"
+      - "Candle"
+
+  - platform: mqtt
+    name: "personAs NL Sleep Sound"
+    icon: mdi:music-note-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/sound/state"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/sound/state_set"
+    brightness_state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/sound/volume"
+    brightness_command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/sound/volume_set"
+    brightness_scale: 15
+    effect_state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/sound/effect"
+    effect_command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/sound/effect_set"
+    effect_list:
+      - "Ocean"
+      - "Thunder"
+      - "Rain"
+      - "Stream"
+      - "Rainforest"
+      - "Wind"
+      - "Deep space"
+      - "Bird"
+      - "Cricket"
+      - "Whale"
+      - "White Noise"
+      - "Pink Noise"
+      - "Fan"
+      - "Hairdryer"
+      - "Lullaby"
+      - "Piano"
+      - "Wind Chimes"
+
+switch:
+  - platform: mqtt
+    name: "personAs NL Device"
+    icon: mdi:light-switch
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/device/state"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/device/state_set"
+
+  - platform: mqtt
+    name: "personAs NL Sleep"
+    icon: mdi:light-switch
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/state"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/state_set"
+
+  - platform: mqtt
+    name: "personAs NL Alarm 1"
+    icon: mdi:light-switch
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/state"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/state_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 1 Sunday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/sun"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/sun_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 1 Monday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/mon"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/mon_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 1 Tuesday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/tue"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/tue_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 1 Wednesday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/wed"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/wed_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 1 Thursday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/thu"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/thu_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 1 Friday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/fri"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/fri_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 1 Saturday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/sat"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/sat_set"
+
+  - platform: mqtt
+    name: "personAs NL Alarm 2"
+    icon: mdi:light-switch
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/state"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/state_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 2 Sunday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/sun"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/sun_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 2 Monday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/mon"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/mon_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 2 Tuesday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/tue"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/tue_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 2 Wednesday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/wed"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/wed_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 2 Thursday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/thu"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/thu_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 2 Friday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/fri"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/fri_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 2 Saturday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/sat"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/sat_set"
+
+  - platform: mqtt
+    name: "personAs NL Alarm 3"
+    icon: mdi:light-switch
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/state"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/state_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 3 Sunday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/sun"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/sun_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 3 Monday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/mon"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/mon_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 3 Tuesday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/tue"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/tue_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 3 Wednesday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/wed"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/wed_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 3 Thursday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/thu"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/thu_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 3 Friday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/fri"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/fri_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 3 Saturday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/sat"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/sat_set"
+
+  - platform: mqtt
+    name: "personAs NL Alarm 4"
+    icon: mdi:light-switch
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/state"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/state_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 4 Sunday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/sun"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/sun_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 4 Monday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/mon"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/mon_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 4 Tuesday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/tue"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/tue_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 4 Wednesday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/wed"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/wed_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 4 Thursday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/thu"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/thu_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 4 Friday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/fri"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/fri_set"
+  - platform: mqtt
+    name: "personAs NL Alarm 4 Saturday"
+    icon: mdi:calendar-week
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/sat"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/sat_set"
+
+number:
+  - platform: mqtt
+    name: "personAs NL Sound Timer Minutes"
+    icon: mdi:timer-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sound/timer"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sound/timer_set"
+    min: 0
+    max: 30
+    step: 1
+
+  - platform: mqtt
+    name: "personAs NL Sleep Time Minutes"
+    icon: mdi:timer-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/time_minutes"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/time_minutes_set"
+    min: 1
+    max: 180
+    step: 1
+
+  - platform: mqtt
+    name: "personAs NL Sleep Time Seconds"
+    icon: mdi:timer-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/time_seconds"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/time_seconds_set"
+    min: 0
+    max: 59
+    step: 1
+
+  - platform: mqtt
+    name: "personAs NL Alarm 1 Hour"
+    icon: mdi:timer-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/time_hour"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/time_hour_set"
+    min: 0
+    max: 23
+    step: 1
+  - platform: mqtt
+    name: "personAs NL Alarm 1 Minute"
+    icon: mdi:timer-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/time_minute"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/time_minute_set"
+    min: 0
+    max: 59
+    step: 1
+  - platform: mqtt
+    name: "personAs NL Alarm 1 Brightness"
+    icon: mdi:weather-sunny
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/brightness"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/brightness_set"
+    min: 1
+    max: 100
+    step: 1
+  - platform: mqtt
+    name: "personAs NL Alarm 1 Volume"
+    icon: mdi:music-note-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/volume"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/volume_set"
+    min: 0
+    max: 15
+    step: 1
+  - platform: mqtt
+    name: "personAs NL Alarm 1 Snooze Time"
+    icon: mdi:timer-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/snooze"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/snooze_set"
+    min: 5
+    max: 15
+    step: 5
+
+  - platform: mqtt
+    name: "personAs NL Alarm 2 Hour"
+    icon: mdi:timer-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/time_hour"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/time_hour_set"
+    min: 0
+    max: 23
+    step: 1
+  - platform: mqtt
+    name: "personAs NL Alarm 2 Minute"
+    icon: mdi:timer-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/time_minute"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/time_minute_set"
+    min: 0
+    max: 59
+    step: 1
+  - platform: mqtt
+    name: "personAs NL Alarm 2 Brightness"
+    icon: mdi:weather-sunny
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/brightness"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/brightness_set"
+    min: 1
+    max: 100
+    step: 1
+  - platform: mqtt
+    name: "personAs NL Alarm 2 Volume"
+    icon: mdi:music-note-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/volume"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/volume_set"
+    min: 0
+    max: 15
+    step: 1
+  - platform: mqtt
+    name: "personAs NL Alarm 2 Snooze Time"
+    icon: mdi:timer-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/snooze"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/snooze_set"
+    min: 5
+    max: 15
+    step: 5
+
+  - platform: mqtt
+    name: "personAs NL Alarm 3 Hour"
+    icon: mdi:timer-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/time_hour"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/time_hour_set"
+    min: 0
+    max: 23
+    step: 1
+  - platform: mqtt
+    name: "personAs NL Alarm 3 Minute"
+    icon: mdi:timer-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/time_minute"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/time_minute_set"
+    min: 0
+    max: 59
+    step: 1
+  - platform: mqtt
+    name: "personAs NL Alarm 3 Brightness"
+    icon: mdi:weather-sunny
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/brightness"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/brightness_set"
+    min: 1
+    max: 100
+    step: 1
+  - platform: mqtt
+    name: "personAs NL Alarm 3 Volume"
+    icon: mdi:music-note-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/volume"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/volume_set"
+    min: 0
+    max: 15
+    step: 1
+  - platform: mqtt
+    name: "personAs NL Alarm 3 Snooze Time"
+    icon: mdi:timer-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/snooze"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/snooze_set"
+    min: 5
+    max: 15
+    step: 5
+
+  - platform: mqtt
+    name: "personAs NL Alarm 4 Hour"
+    icon: mdi:timer-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/time_hour"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/time_hour_set"
+    min: 0
+    max: 23
+    step: 1
+  - platform: mqtt
+    name: "personAs NL Alarm 4 Minute"
+    icon: mdi:timer-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/time_minute"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/time_minute_set"
+    min: 0
+    max: 59
+    step: 1
+  - platform: mqtt
+    name: "personAs NL Alarm 4 Brightness"
+    icon: mdi:weather-sunny
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/brightness"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/brightness_set"
+    min: 1
+    max: 100
+    step: 1
+  - platform: mqtt
+    name: "personAs NL Alarm 4 Volume"
+    icon: mdi:music-note-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/volume"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/volume_set"
+    min: 0
+    max: 15
+    step: 1
+  - platform: mqtt
+    name: "personAs NL Alarm 4 Snooze Time"
+    icon: mdi:timer-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/snooze"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/snooze_set"
+    min: 5
+    max: 15
+    step: 5
+
+sensor:
+  - platform: mqtt
+    name: "personAs NL Sleep Time Minutes Remaining"
+    icon: mdi:timer-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/time_remaining_minutes"
+
+  - platform: mqtt
+    name: "personAs NL Sleep Time Seconds Remaining"
+    icon: mdi:timer-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/sleep/time_remaining_seconds"
+
+select:
+  - platform: mqtt
+    name: "personAs NL Alarm 1 Sound"
+    icon: mdi:music-note-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/sound"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_1/sound_set"
+    options:
+      - "None"
+      - "Ocean"
+      - "Thunder"
+      - "Rain"
+      - "Stream"
+      - "Rainforest"
+      - "Wind"
+      - "Deep space"
+      - "Bird"
+      - "Cricket"
+      - "Whale"
+      - "White Noise"
+      - "Pink Noise"
+      - "Fan"
+      - "Hairdryer"
+      - "Lullaby"
+      - "Piano"
+      - "Wind Chimes"
+
+  - platform: mqtt
+    name: "personAs NL Alarm 2 Sound"
+    icon: mdi:music-note-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/sound"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_2/sound_set"
+    options:
+      - "None"
+      - "Ocean"
+      - "Thunder"
+      - "Rain"
+      - "Stream"
+      - "Rainforest"
+      - "Wind"
+      - "Deep space"
+      - "Bird"
+      - "Cricket"
+      - "Whale"
+      - "White Noise"
+      - "Pink Noise"
+      - "Fan"
+      - "Hairdryer"
+      - "Lullaby"
+      - "Piano"
+      - "Wind Chimes"
+
+  - platform: mqtt
+    name: "personAs NL Alarm 3 Sound"
+    icon: mdi:music-note-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/sound"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_3/sound_set"
+    options:
+      - "None"
+      - "Ocean"
+      - "Thunder"
+      - "Rain"
+      - "Stream"
+      - "Rainforest"
+      - "Wind"
+      - "Deep space"
+      - "Bird"
+      - "Cricket"
+      - "Whale"
+      - "White Noise"
+      - "Pink Noise"
+      - "Fan"
+      - "Hairdryer"
+      - "Lullaby"
+      - "Piano"
+      - "Wind Chimes"
+
+  - platform: mqtt
+    name: "personAs NL Alarm 4 Sound"
+    icon: mdi:music-note-outline
+    availability_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/LWT"
+    state_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/sound"
+    command_topic: "t2t2m2p2m2ha/personAs_soulsens_night_light/alarms/alarm_4/sound_set"
+    options:
+      - "None"
+      - "Ocean"
+      - "Thunder"
+      - "Rain"
+      - "Stream"
+      - "Rainforest"
+      - "Wind"
+      - "Deep space"
+      - "Bird"
+      - "Cricket"
+      - "Whale"
+      - "White Noise"
+      - "Pink Noise"
+      - "Fan"
+      - "Hairdryer"
+      - "Lullaby"
+      - "Piano"
+      - "Wind Chimes"

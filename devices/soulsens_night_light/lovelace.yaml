@@ -1,0 +1,303 @@
+views:
+  - title: soulsens
+    path: soulsens
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - entity: switch.personAs_nl_device
+            name: Power
+        show_header_toggle: false
+      - type: conditional
+        conditions:
+          - entity: switch.personAs_nl_device
+            state: 'on'
+        card:
+          type: vertical-stack
+          cards:
+            - type: custom:button-card
+              name: Standard Settings
+            - type: horizontal-stack
+              cards:
+                - type: light
+                  entity: light.personAs_nl_white_light
+                  name: White
+                - type: light
+                  entity: light.personAs_nl_color_light
+                  name: Color
+                - type: light
+                  entity: light.personAs_nl_effect_light
+                  name: Effect
+                - type: light
+                  entity: light.personAs_nl_sound
+                  name: Sound
+            - type: entities
+              entities:
+                - entity: number.personAs_nl_sound_timer_minutes
+                  name: Sound Timer (Minutes)
+              show_header_toggle: false
+            - type: custom:button-card
+              name: Sleep Settings
+            - type: horizontal-stack
+              cards:
+                - type: light
+                  entity: light.personAs_nl_sleep_white_light
+                  name: White
+                - type: light
+                  entity: light.personAs_nl_sleep_color_light
+                  name: Color
+                - type: light
+                  entity: light.personAs_nl_sleep_effect_light
+                  name: Effect
+                - type: light
+                  entity: light.personAs_nl_sleep_sound
+                  name: Sound
+            - type: entities
+              entities:
+                - entity: switch.personAs_nl_sleep
+                  name: Enable Sleep
+            - type: horizontal-stack
+              cards:
+                - type: entities
+                  entities:
+                    - entity: number.personAs_nl_sleep_time_minutes
+                      name: Minutes
+                    - entity: number.personAs_nl_sleep_time_seconds
+                      name: Seconds
+                - type: entities
+                  entities:
+                    - entity: sensor.personAs_nl_sleep_time_minutes_remaining
+                      name: Minutes Left
+                    - entity: sensor.personAs_nl_sleep_time_seconds_remaining
+                      name: Seconds Left
+      - type: conditional
+        conditions:
+          - entity: switch.personAs_nl_device
+            state: 'on'
+        card:
+          type: entities
+          entities:
+            - entity: switch.personAs_nl_alarm_4
+              type: custom:multiple-entity-row
+              name: Alarms
+              state_header: 4
+              toggle: true
+              state_color: true
+              entities:
+                - entity: switch.personAs_nl_alarm_1
+                  name: 1
+                  toggle: true
+                - entity: switch.personAs_nl_alarm_2
+                  name: 2
+                  toggle: true
+                - entity: switch.personAs_nl_alarm_3
+                  name: 3
+                  toggle: true
+      - type: conditional
+        conditions:
+          - entity: switch.personAs_nl_alarm_1
+            state: 'on'
+          - entity: switch.personAs_nl_device
+            state: 'on'
+        card:
+          type: entities
+          entities:
+            - entity: number.personAs_nl_alarm_1_hour
+              name: Hour
+            - entity: number.personAs_nl_alarm_1_minute
+              name: Minute
+            - entity: switch.personAs_nl_alarm_1_friday
+              type: custom:multiple-entity-row
+              name: '  '
+              state_header: Fri
+              toggle: true
+              state_color: true
+              entities:
+                - entity: switch.personAs_nl_alarm_1_monday
+                  name: Mon
+                  toggle: true
+                - entity: switch.personAs_nl_alarm_1_tuesday
+                  name: Tue
+                  toggle: true
+                - entity: switch.personAs_nl_alarm_1_wednesday
+                  name: Wed
+                  toggle: true
+                - entity: switch.personAs_nl_alarm_1_thursday
+                  name: Thu
+                  toggle: true
+            - entity: switch.personAs_nl_alarm_1_saturday
+              type: custom:multiple-entity-row
+              name: ' '
+              state_header: Sat
+              toggle: true
+              state_color: true
+              entities:
+                - entity: switch.personAs_nl_alarm_1_sunday
+                  name: Sun
+                  toggle: true
+            - entity: number.personAs_nl_alarm_1_brightness
+              name: Brightness
+            - entity: select.personAs_nl_alarm_1_sound
+              name: Sound Choice
+            - entity: number.personAs_nl_alarm_1_volume
+              name: Volume
+            - entity: number.personAs_nl_alarm_1_snooze_time
+              name: Snooze Time
+          title: Alarm 1 Settings
+          show_header_toggle: false
+      - type: conditional
+        conditions:
+          - entity: switch.personAs_nl_alarm_2
+            state: 'on'
+          - entity: switch.personAs_nl_device
+            state: 'on'
+        card:
+          type: entities
+          entities:
+            - entity: number.personAs_nl_alarm_2_hour
+              name: Hour
+            - entity: number.personAs_nl_alarm_2_minute
+              name: Minute
+            - entity: switch.personAs_nl_alarm_2_friday
+              type: custom:multiple-entity-row
+              name: '  '
+              state_header: Fri
+              toggle: true
+              state_color: true
+              entities:
+                - entity: switch.personAs_nl_alarm_2_monday
+                  name: Mon
+                  toggle: true
+                - entity: switch.personAs_nl_alarm_2_tuesday
+                  name: Tue
+                  toggle: true
+                - entity: switch.personAs_nl_alarm_2_wednesday
+                  name: Wed
+                  toggle: true
+                - entity: switch.personAs_nl_alarm_2_thursday
+                  name: Thu
+                  toggle: true
+            - entity: switch.personAs_nl_alarm_2_saturday
+              type: custom:multiple-entity-row
+              name: ' '
+              state_header: Sat
+              toggle: true
+              state_color: true
+              entities:
+                - entity: switch.personAs_nl_alarm_2_sunday
+                  name: Sun
+                  toggle: true
+            - entity: number.personAs_nl_alarm_2_brightness
+              name: Brightness
+            - entity: select.personAs_nl_alarm_2_sound
+              name: Sound Choice
+            - entity: number.personAs_nl_alarm_2_volume
+              name: Volume
+            - entity: number.personAs_nl_alarm_2_snooze_time
+              name: Snooze Time
+          title: Alarm 2 Settings
+          show_header_toggle: false
+      - type: conditional
+        conditions:
+          - entity: switch.personAs_nl_alarm_3
+            state: 'on'
+          - entity: switch.personAs_nl_device
+            state: 'on'
+        card:
+          type: entities
+          entities:
+            - entity: number.personAs_nl_alarm_3_hour
+              name: Hour
+            - entity: number.personAs_nl_alarm_3_minute
+              name: Minute
+            - entity: switch.personAs_nl_alarm_3_friday
+              type: custom:multiple-entity-row
+              name: '  '
+              state_header: Fri
+              toggle: true
+              state_color: true
+              entities:
+                - entity: switch.personAs_nl_alarm_3_monday
+                  name: Mon
+                  toggle: true
+                - entity: switch.personAs_nl_alarm_3_tuesday
+                  name: Tue
+                  toggle: true
+                - entity: switch.personAs_nl_alarm_3_wednesday
+                  name: Wed
+                  toggle: true
+                - entity: switch.personAs_nl_alarm_3_thursday
+                  name: Thu
+                  toggle: true
+            - entity: switch.personAs_nl_alarm_3_saturday
+              type: custom:multiple-entity-row
+              name: ' '
+              state_header: Sat
+              toggle: true
+              state_color: true
+              entities:
+                - entity: switch.personAs_nl_alarm_3_sunday
+                  name: Sun
+                  toggle: true
+            - entity: number.personAs_nl_alarm_3_brightness
+              name: Brightness
+            - entity: select.personAs_nl_alarm_3_sound
+              name: Sound Choice
+            - entity: number.personAs_nl_alarm_3_volume
+              name: Volume
+            - entity: number.personAs_nl_alarm_3_snooze_time
+              name: Snooze Time
+          title: Alarm 3 Settings
+          show_header_toggle: false
+      - type: conditional
+        conditions:
+          - entity: switch.personAs_nl_alarm_4
+            state: 'on'
+          - entity: switch.personAs_nl_device
+            state: 'on'
+        card:
+          type: entities
+          entities:
+            - entity: number.personAs_nl_alarm_4_hour
+              name: Hour
+            - entity: number.personAs_nl_alarm_4_minute
+              name: Minute
+            - entity: switch.personAs_nl_alarm_4_friday
+              type: custom:multiple-entity-row
+              name: '  '
+              state_header: Fri
+              toggle: true
+              state_color: true
+              entities:
+                - entity: switch.personAs_nl_alarm_4_monday
+                  name: Mon
+                  toggle: true
+                - entity: switch.personAs_nl_alarm_4_tuesday
+                  name: Tue
+                  toggle: true
+                - entity: switch.personAs_nl_alarm_4_wednesday
+                  name: Wed
+                  toggle: true
+                - entity: switch.personAs_nl_alarm_4_thursday
+                  name: Thu
+                  toggle: true
+            - entity: switch.personAs_nl_alarm_4_saturday
+              type: custom:multiple-entity-row
+              name: ' '
+              state_header: Sat
+              toggle: true
+              state_color: true
+              entities:
+                - entity: switch.personAs_nl_alarm_4_sunday
+                  name: Sun
+                  toggle: true
+            - entity: number.personAs_nl_alarm_4_brightness
+              name: Brightness
+            - entity: select.personAs_nl_alarm_4_sound
+              name: Sound Choice
+            - entity: number.personAs_nl_alarm_4_volume
+              name: Volume
+            - entity: number.personAs_nl_alarm_4_snooze_time
+              name: Snooze Time
+          title: Alarm 4 Settings
+          show_header_toggle: false
