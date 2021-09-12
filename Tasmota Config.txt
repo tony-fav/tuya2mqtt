@@ -12,3 +12,11 @@ SetOption66 1
 
 - Set timezone right bc this thing uses alarms (US, Eastern Time)
 Backlog TimeStd 0,1,11,1,2,-300; TimeDst 0,2,3,1,2,-240; timezone 99
+
+
+
+Devices which requires SO97 1
+    - fairy light controller
+
+Devices which use non-standard GPIOs for TX and RX
+    - 

@@ -53,8 +53,9 @@ while 1:
                     ser.write(bytearray.fromhex('55AA030000010104'))
             elif tuya_comm[3] == ord(b'\x01'): 
                 print('Query Product Info')
+                ser.write(bytearray.fromhex('55AA0301002A7B2270223A227570696A6673346B7261727477687176222C2276223A22312E302E30222C226D223A307D9E')) # HeimVision N600S, {"p":"upijfs4krartwhqv","v":"1.0.0","m":0}
                 # ser.write(bytearray.fromhex('55AA0301002A7B2270223A2263376173626867743273767568773573222C2276223A22322E302E33222C226D223A327D1F')) # Fairy Lights Controller
-                ser.write(bytearray.fromhex('55AA0301002B7B2270223A226776666D773863386E3932756D706178222C2276223A22332E332E3136222C226D223A307D2A')) # Esmlfe Fan-Light Switch, {"p":"gvfmw8c8n92umpax","v":"3.3.16","m":0}
+                # ser.write(bytearray.fromhex('55AA0301002B7B2270223A226776666D773863386E3932756D706178222C2276223A22332E332E3136222C226D223A307D2A')) # Esmlfe Fan-Light Switch, {"p":"gvfmw8c8n92umpax","v":"3.3.16","m":0}
             elif tuya_comm[3] == ord(b'\x02'): 
                 print('Query Working Mode')
                 ser.write(bytearray.fromhex('55AA0302000004'))
@@ -62,7 +63,7 @@ while 1:
                 print('Network Status')
                 ser.write(bytearray.fromhex('55AA0303000005'))
 
-                # THIS RESETS ITS WIFI SETTINGS
+                # THIS RESETS ITS WIFI SETTINGS. We do this bc the app freaks out when the fake device isn't newly added.
                 if first_tell_to_reset_wifi:
                     ser.write(bytearray.fromhex('55AA0304000006'))
                     first_tell_to_reset_wifi = False

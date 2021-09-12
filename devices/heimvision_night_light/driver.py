@@ -286,6 +286,8 @@ def on_message(client, userdata, msg):
                             publish(HA_TOPIC + 'sound/choice', payload=sound_types[sound_choice])
                             if logging: publog('109: Sound Choice (0 to 26): %s' % sound_choice)
                             
+                        # Sniffing revealed a DpId 110 here that's pretty complex and is just some kind of alarm which we don't need.
+                            
                         elif DpId == 112 and DpIdType == 1:
                             unknown_state = hex2bool[DpIdData]
                             publish(HA_TOPIC + 'unknown/state', payload=bool2payload[unknown_state])
