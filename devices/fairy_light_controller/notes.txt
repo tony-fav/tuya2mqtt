@@ -1,0 +1,149 @@
+Tuya Fairy Light Controller
+
+App
+  Power Button
+    Simple On Off
+  Scene Button
+    Palm Tree = Pole: 4 Options and Brightness
+    Christmas Tree: 9 Options
+    Fence Mode: 4 Options
+    TV Mode (1 Loop Mode): 6 Options
+    Rows of Strings Mode (4 Sections?): 8 Options
+    Random Strings Mode (3 Sections?): 8 Options
+    Wreath Mode: 4 Options
+    There's a ... button that says "coming soon"
+  Music Button
+  Dimmer Button
+    RGB Pallete + Brightness
+  Settings
+
+
+Requires: SetOption97 1
+
+On boot, we get (example):
+{'DpId': 20, 'DpIdType': 1, 'DpIdData': '01'}
+{'DpId': 21, 'DpIdType': 4, 'DpIdData': '02'}
+{'DpId': 24, 'DpIdType': 3, 'DpIdData': '303030303030303030336538', 'Type3Data': '0000000003e8'}
+{'DpId': 25, 'DpIdType': 3, 'DpIdData': '323030303634', 'Type3Data': '200064'}
+{'DpId': 26, 'DpIdType': 2, 'DpIdData': '00000000'}
+{'DpId': 101, 'DpIdType': 3, 'DpIdData': '34363330334538313030303830334538303345380000', 'Type3Data': '46303E81000803E803E8'}
+
+
+DPID 20 = Boolean for Power
+DPID 21 = Enum for Mode
+  0 for Constant Mode (DPID 24 for Color)
+  1 for Scene Mode (DPID 25 for Settings)
+  2 for Music Mode (DPID 101 for Settings)
+
+DPID 101 = String of Hex for Music Mode Settings
+Changing Music Modes
+  16403E810135024000FA
+  26403E810135024000FA
+  36303E810135024000FA
+  46403E810135024000FA
+Change Brightness
+  46400FA10135024000FA  25%
+  46401F410135024000FA  50%
+  46403E810135024000FA  100%
+Change Sensititivy from Min To Max
+  40003E810135024000FA
+  40A03E810135024000FA
+  41403E810135024000FA
+  41E03E810135024000FA
+  42803E810135024000FA
+  43203E810135024000FA
+  43C03E810135024000FA
+  44603E810135024000FA
+  45003E810135024000FA
+  45A03E810135024000FA
+  46303E810135024000FA
+
+
+On Off Button
+  DPID 20, bool, on/off
+
+Scenes (DPID 25, String, aabbbb where aa is type value as dec number, bb is brightness as hex value...)
+  Palm Tree
+    01, 05, 10, 11
+  Christmas Tree
+    01, 02, 03, 05, 06, 07, 10, 14, 16
+  Fence
+    01, 05, 10, 11
+  TV
+    01, 05, 10, 11, 12, 19
+  String Type 1
+    01, 02, 03, 05, 06, 08, 10, 11
+  String Type 2
+    01, 02, 03, 05, 06, 10, 11, 12
+  Wreath
+    01, 05, 15, 19
+  
+
+43e03e800011036d03e8 auto off
+43e03e810011036d03e8 auto on
+43e03e800011036d03e8 auto off
+46403e800011036d03e8 sensitivity max
+40103e800011036d03e8 sensitivity min
+40103e800006037e03e8 choose red
+40103e80012a038e03e8 choose purple
+40103e8000d7034c03e8 choose blue
+40103e8000ad038d03e8 choose cyan
+40103e800071039603e8 choose green
+40103e80004503bc03e8 choose yellow
+40103e800006012603e8 lower saturation red
+401013600006012603e8 lower brigthness
+40103e800006012603e8 max brightness
+
+4 3e 03e8 0 0011 036d 03e8 auto off
+4 3e 03e8 1 0011 036d 03e8 auto on
+4 3e 03e8 0 0011 036d 03e8 auto off
+4 64 03e8 0 0011 036d 03e8 sensitivity max
+4 01 03e8 0 0011 036d 03e8 sensitivity min
+4 01 03e8 0 0006 037e 03e8 choose red
+4 01 03e8 0 012a 038e 03e8 choose purple
+4 01 03e8 0 00d7 034c 03e8 choose blue
+4 01 03e8 0 00ad 038d 03e8 choose cyan
+4 01 03e8 0 0071 0396 03e8 choose green
+4 01 03e8 0 0045 03bc 03e8 choose yellow
+4 01 03e8 0 0006 0126 03e8 lower saturation red
+4 01 0136 0 0006 0126 03e8 lower brigthness
+4 01 03e8 0 0006 0126 03e8 max brightness
+
+
+
+
+
+
+01  Rainbow on Entire String
+02  Rainbow but goes Lit x 1 then Unlit x 8
+03  Wipe with a fade through dark between sections
+04  Sections of color bouncing around
+05  All lights blinking through gixed colors indep
+06  Wipe with no dark and lots of sections
+07  Same as 6 but with dark areas
+08  Full Reverse Wipe
+09  Light whole string, then unlights then changes color
+10  Cycles through colors on whole string
+11  Same as 10 but dark between colors
+12  Solid blue with 1 red pixel looping the whole string
+13  Like 7 but just cyan?
+14  Like 02 but orange/warm white as background
+15  Wipe from middle out
+16  All are sparkings but then it fills it slowly, then changes colors
+17  Same as 16 but from both ends to the center
+18  Same at 17 but reversed
+19  Same at 10 but fades between colors, not blink
+20  Wipes from ends to center as 1 color, unwipes as a different color, then changes and starts again
+
+
+
+
+
+
+
+
+
+
+
+
+DPID 26 is a timer in seconds. app maxed it at 24 hr

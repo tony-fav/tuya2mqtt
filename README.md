@@ -1,0 +1,1 @@
+This project is for writing interface layers between Tuya devices, flash with Tasmota which use serial communication with data points not directly supported by Tasmota.
