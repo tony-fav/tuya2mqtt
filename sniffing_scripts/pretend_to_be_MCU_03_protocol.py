@@ -53,9 +53,11 @@ while 1:
                     ser.write(bytearray.fromhex('55AA030000010104'))
             elif tuya_comm[3] == ord(b'\x01'): 
                 print('Query Product Info')
-                ser.write(bytearray.fromhex('55AA0301002A7B2270223A227570696A6673346B7261727477687176222C2276223A22312E302E30222C226D223A307D9E')) # HeimVision N600S, {"p":"upijfs4krartwhqv","v":"1.0.0","m":0}
-                # ser.write(bytearray.fromhex('55AA0301002A7B2270223A2263376173626867743273767568773573222C2276223A22322E302E33222C226D223A327D1F')) # Fairy Lights Controller
-                # ser.write(bytearray.fromhex('55AA0301002B7B2270223A226776666D773863386E3932756D706178222C2276223A22332E332E3136222C226D223A307D2A')) # Esmlfe Fan-Light Switch, {"p":"gvfmw8c8n92umpax","v":"3.3.16","m":0}
+                product_string = '55AA0301002A7B2270223A2264737475716B766D633873676E746C6B222C2276223A22312E302E30222C226D223A307D9C' # MLambert String Lights Controller, {"p":"dstuqkvmc8sgntlk","v":"1.0.0","m":0}
+                # product_string = '55AA0301002A7B2270223A227570696A6673346B7261727477687176222C2276223A22312E302E30222C226D223A307D9E' # HeimVision N600S, {"p":"upijfs4krartwhqv","v":"1.0.0","m":0}
+                # product_string = '55AA0301002A7B2270223A2263376173626867743273767568773573222C2276223A22322E302E33222C226D223A327D1F' # Fairy Lights Controller
+                # product_string = '55AA0301002B7B2270223A226776666D773863386E3932756D706178222C2276223A22332E332E3136222C226D223A307D2A' # Esmlfe Fan-Light Switch, {"p":"gvfmw8c8n92umpax","v":"3.3.16","m":0}
+                ser.write(bytearray.fromhex(product_string))
             elif tuya_comm[3] == ord(b'\x02'): 
                 print('Query Working Mode')
                 ser.write(bytearray.fromhex('55AA0302000004'))
@@ -101,8 +103,12 @@ while 1:
                     print('    TYPE: %s' % sdu_types[sdu_type])
                     print('    DATA: %s' % DpIdData)
 
-                    if sdu_types[sdu_type] == 'string':
-                        print('    VALUE: %s' % bytearray.fromhex(DpIdData).decode())
+                    if sdu_types[sdu_type] == 'string' or sdu_types[sdu_type] == 'raw':
+                        print('    AS STR: %s' % bytearray.fromhex(DpIdData).decode())
+                    elif sdu_types[sdu_type] == 'value' or sdu_types[sdu_type] == 'enum':
+                        print('    AS INT: %d' % int(DpIdData, 16))
+                    elif sdu_types[sdu_type] == 'bool':
+                        print('    AS BOOL: %s' % str(DpIdData == '01'))
 
                     if (n+4+sdu_len) == data_len:
                         break
