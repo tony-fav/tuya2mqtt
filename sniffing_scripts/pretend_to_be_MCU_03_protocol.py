@@ -1,9 +1,26 @@
 import serial
 from time import sleep
+
+### Inputs
+serial_port = "COM6"
+serial_baudrate = 115200
+log_extras = False # heartbeat, wifi connections, status queries, etc...
+reset_connection = False
+pub_to_tas = True
+tas_device = 'tasmota_197248'
+if pub_to_tas: from secrets import MQTT_HOST, MQTT_PORT, MQTT_USER, MQTT_PASSWORD
+
+product_string = '55AA0301002A7B2270223A2264737475716B766D633873676E746C6B222C2276223A22312E302E30222C226D223A307D9C' # MLambert String Lights Controller, {"p":"dstuqkvmc8sgntlk","v":"1.0.0","m":0}
+# product_string = '55AA0301002A7B2270223A227570696A6673346B7261727477687176222C2276223A22312E302E30222C226D223A307D9E' # HeimVision N600S, {"p":"upijfs4krartwhqv","v":"1.0.0","m":0}
+# product_string = '55AA0301002A7B2270223A2263376173626867743273767568773573222C2276223A22322E302E33222C226D223A327D1F' # Fairy Lights Controller
+# product_string = '55AA0301002B7B2270223A226776666D773863386E3932756D706178222C2276223A22332E332E3136222C226D223A307D2A' # Esmlfe Fan-Light Switch, {"p":"gvfmw8c8n92umpax","v":"3.3.16","m":0}
+
+### Script
+
+# Wait for serial port to be available
 while 1:
     try:
-        # ser = serial.Serial("COM3")
-        ser = serial.Serial("COM6",115200)
+        ser = serial.Serial(serial_port, serial_baudrate)
         break
     except PermissionError:
         pass
@@ -11,12 +28,19 @@ while 1:
         print(e)
         sleep(1)
 
-print(ser.name)
+# Connect to MQTT if piping DPID commands to the Tasmota device
+if pub_to_tas:
+    import paho.mqtt.client as mqtt
+    client = mqtt.Client('TuyaSniffer')
+    client.username_pw_set(MQTT_USER , MQTT_PASSWORD)
+    client.connect(MQTT_HOST, port=MQTT_PORT)
+
 sdu_types = {0: 'raw', 1: 'bool', 2: 'value', 3: 'string', 4: 'enum', 5: 'bitmap'}
 
+# Main Loop
 tuya_comm = []
 first_heartbeat = True
-first_tell_to_reset_wifi = True
+first_loop_tell_to_reset_wifi = True
 while 1:
     x = ser.read()
     if x == b'\x55':
@@ -41,40 +65,41 @@ while 1:
             tuya_comm.append(ord(chk))
 
             ts = ''.join('%02x' % b for b in tuya_comm)
-            print('------\n' + ts)
+
+            if log_extras: print('------\n' + ts)
             if len(tuya_comm) == 0:
                 pass
             elif ts == '55aa00000000ff': 
-                print('Heart Beat') # Heart Beat
+                if log_extras: print('Heart Beat') # Heart Beat
                 if first_heartbeat:
                     ser.write(bytearray.fromhex('55AA030000010003'))
                     first_heartbeat = False
                 else:
                     ser.write(bytearray.fromhex('55AA030000010104'))
             elif tuya_comm[3] == ord(b'\x01'): 
-                print('Query Product Info')
-                product_string = '55AA0301002A7B2270223A2264737475716B766D633873676E746C6B222C2276223A22312E302E30222C226D223A307D9C' # MLambert String Lights Controller, {"p":"dstuqkvmc8sgntlk","v":"1.0.0","m":0}
-                # product_string = '55AA0301002A7B2270223A227570696A6673346B7261727477687176222C2276223A22312E302E30222C226D223A307D9E' # HeimVision N600S, {"p":"upijfs4krartwhqv","v":"1.0.0","m":0}
-                # product_string = '55AA0301002A7B2270223A2263376173626867743273767568773573222C2276223A22322E302E33222C226D223A327D1F' # Fairy Lights Controller
-                # product_string = '55AA0301002B7B2270223A226776666D773863386E3932756D706178222C2276223A22332E332E3136222C226D223A307D2A' # Esmlfe Fan-Light Switch, {"p":"gvfmw8c8n92umpax","v":"3.3.16","m":0}
+                if log_extras: print('Query Product Info')
                 ser.write(bytearray.fromhex(product_string))
             elif tuya_comm[3] == ord(b'\x02'): 
-                print('Query Working Mode')
+                if log_extras: print('Query Working Mode')
                 ser.write(bytearray.fromhex('55AA0302000004'))
             elif tuya_comm[3] == ord(b'\x03'): 
-                print('Network Status')
+                if log_extras: print('Network Status')
                 ser.write(bytearray.fromhex('55AA0303000005'))
 
                 # THIS RESETS ITS WIFI SETTINGS. We do this bc the app freaks out when the fake device isn't newly added.
-                if first_tell_to_reset_wifi:
+                if reset_connection and first_loop_tell_to_reset_wifi:
                     ser.write(bytearray.fromhex('55AA0304000006'))
-                    first_tell_to_reset_wifi = False
+                    first_loop_tell_to_reset_wifi = False
             elif tuya_comm[3] == ord(b'\x08'): 
-                print('Query Status') 
+                if log_extras: print('Query Status') 
             elif tuya_comm[3] == ord(b'\x1c'): 
-                print('Send Local Time')
-                ser.write(bytearray.fromhex('55AA001C0008011508031731020290'))
+                if log_extras: print('Send Local Time')
+                ser.write(bytearray.fromhex('55AA001C0008011508031731020290')) # totally fake
             elif tuya_comm[3] == ord(b'\x06'):
+                if not log_extras: print('------\n' + ts)
+                if pub_to_tas:
+                    client.publish('cmnd/' + tas_device + '/SerialSend5', payload=ts)
+
                 ts_ack = list(ts[:])
                 ts_ack[5] = '3'
                 ts_ack[7] = '7'
@@ -104,11 +129,11 @@ while 1:
                     print('    DATA: %s' % DpIdData)
 
                     if sdu_types[sdu_type] == 'string' or sdu_types[sdu_type] == 'raw':
-                        print('    AS STR: %s' % bytearray.fromhex(DpIdData).decode())
+                        print('  AS STR: %s' % bytearray.fromhex(DpIdData).decode())
                     elif sdu_types[sdu_type] == 'value' or sdu_types[sdu_type] == 'enum':
-                        print('    AS INT: %d' % int(DpIdData, 16))
+                        print('  AS INT: %d' % int(DpIdData, 16))
                     elif sdu_types[sdu_type] == 'bool':
-                        print('    AS BOOL: %s' % str(DpIdData == '01'))
+                        print(' AS BOOL: %s' % str(DpIdData == '01'))
 
                     if (n+4+sdu_len) == data_len:
                         break
