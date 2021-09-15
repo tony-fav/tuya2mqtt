@@ -1,0 +1,15 @@
+views:
+  - title: mlambert_string_light_controller
+    path: mlambert_string_light_controller
+    badges: []
+    cards:
+      - type: light
+        entity: light.mlambert_string_light_white
+      - type: light
+        entity: light.mlambert_string_light_color
+      - type: light
+        entity: light.mlambert_string_light_effect
+      - type: light
+        entity: light.mlambert_string_light_pick_2_color_1
+      - type: light
+        entity: light.mlambert_string_light_pick_2_color_2

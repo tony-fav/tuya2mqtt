@@ -1,0 +1,66 @@
+light:
+  - platform: mqtt
+    name: "MLambert String Light White"
+    icon: mdi:weather-sunny
+    availability_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/LWT"
+    state_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/white_state"
+    command_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/white_state_set"
+    brightness_state_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/white_bri"
+    brightness_command_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/white_bri_set"
+    brightness_scale: 255
+    color_temp_state_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/white_ct"
+    color_temp_command_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/white_ct_set"
+
+  - platform: mqtt
+    name: "MLambert String Light Color"
+    icon: mdi:palette
+    availability_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/LWT"
+    state_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/color_state"
+    command_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/color_state_set"
+    rgb_state_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/color_rgb"
+    rgb_command_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/color_rgb_set"
+    brightness_state_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/color_bri"
+    brightness_command_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/color_bri_set"
+    brightness_scale: 255
+
+  - platform: mqtt
+    name: "MLambert String Light Effect"
+    icon: mdi:flare
+    availability_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/LWT"
+    state_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/scene_state"
+    command_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/scene_state_set"
+    effect_state_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/scene"
+    effect_command_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/scene_set"
+    effect_list:
+      - "Strobe"
+      - "Fade"
+      - "Pulse"
+      - "Blink"
+      - "Chase"
+      - "Christmas"
+      - "America"
+      - "Multi"
+
+  - platform: mqtt
+    name: "MLambert String Light Pick 2 Color 1"
+    icon: mdi:palette
+    availability_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/LWT"
+    state_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/pick2_state"
+    command_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/pick2_state_set"
+    rgb_state_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/pick2_color1_rgb"
+    rgb_command_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/pick2_color1_rgb_set"
+    brightness_state_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/pick2_color1_bri"
+    brightness_command_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/pick2_color1_bri_set"
+    brightness_scale: 255
+
+  - platform: mqtt
+    name: "MLambert String Light Pick 2 Color 2"
+    icon: mdi:palette
+    availability_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/LWT"
+    state_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/pick2_state"
+    command_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/pick2_state_set"
+    rgb_state_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/pick2_color2_rgb"
+    rgb_command_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/pick2_color2_rgb_set"
+    brightness_state_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/pick2_color2_bri"
+    brightness_command_topic: "t2t2m2p2m2ha/mlambert_string_light_controller/pick2_color2_bri_set"
+    brightness_scale: 255
