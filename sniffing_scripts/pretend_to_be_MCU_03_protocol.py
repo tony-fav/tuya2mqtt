@@ -12,7 +12,7 @@ if pub_to_tas: from secrets import MQTT_HOST, MQTT_PORT, MQTT_USER, MQTT_PASSWOR
 
 product_string = '55AA0301002A7B2270223A2264737475716B766D633873676E746C6B222C2276223A22312E302E30222C226D223A307D9C' # MLambert String Lights Controller, {"p":"dstuqkvmc8sgntlk","v":"1.0.0","m":0}
 # product_string = '55AA0301002A7B2270223A227570696A6673346B7261727477687176222C2276223A22312E302E30222C226D223A307D9E' # HeimVision N600S, {"p":"upijfs4krartwhqv","v":"1.0.0","m":0}
-# product_string = '55AA0301002A7B2270223A2263376173626867743273767568773573222C2276223A22322E302E33222C226D223A327D1F' # Fairy Lights Controller
+# product_string = '55AA0301002A7B2270223A2263376173626867743273767568773573222C2276223A22322E302E33222C226D223A327D1F' # Fairy Lights Controller, {"p":"c7asbhgt2svuhw5s","v":"2.0.3","m":2}
 # product_string = '55AA0301002B7B2270223A226776666D773863386E3932756D706178222C2276223A22332E332E3136222C226D223A307D2A' # Esmlfe Fan-Light Switch, {"p":"gvfmw8c8n92umpax","v":"3.3.16","m":0}
 
 ### Script
@@ -42,6 +42,7 @@ tuya_comm = []
 first_heartbeat = True
 first_loop_tell_to_reset_wifi = True
 while 1:
+    client.loop()
     x = ser.read()
     if x == b'\x55':
         y = ser.read()
@@ -98,7 +99,8 @@ while 1:
             elif tuya_comm[3] == ord(b'\x06'):
                 if not log_extras: print('------\n' + ts)
                 if pub_to_tas:
-                    client.publish('cmnd/' + tas_device + '/SerialSend5', payload=ts)
+                    rc = client.publish('cmnd/' + tas_device + '/SerialSend5', payload=ts)
+                    print(rc)
 
                 ts_ack = list(ts[:])
                 ts_ack[5] = '3'
@@ -135,6 +137,13 @@ while 1:
                     elif sdu_types[sdu_type] == 'bool':
                         print(' AS BOOL: %s' % str(DpIdData == '01'))
 
+                    if sdu_types[sdu_type] == 'string':
+                        the_str = bytearray.fromhex(DpIdData).decode()
+                        if len(the_str) == 12:
+                            print('  Try HHHHSSSSVVVV --> %d, %d, %d' % (int(the_str[0:4], 16), int(the_str[4:8], 16), int(the_str[8:12], 16)))
+                        elif len(the_str) == 14:
+                            print('  Try RRGGBBHHHHSSVV --> %d, %d, %d, %d, %d, %d' % (int(the_str[0:2], 16), int(the_str[2:4], 16), int(the_str[4:6], 16), int(the_str[6:10], 16), int(the_str[10:12], 16), int(the_str[12:14], 16)))
+                            
                     if (n+4+sdu_len) == data_len:
                         break
                     else:
