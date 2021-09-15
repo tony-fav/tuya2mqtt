@@ -1,0 +1,90 @@
+light:
+  - platform: mqtt
+    name: "Fairy Light Controller Fixed"
+    icon: mdi:palette
+    availability_topic: "t2t2m2p2m2ha/fairy_light_controller/LWT"
+    state_topic: "t2t2m2p2m2ha/fairy_light_controller/fixed/state"
+    command_topic: "t2t2m2p2m2ha/fairy_light_controller/fixed/state_set"
+    brightness_state_topic: "t2t2m2p2m2ha/fairy_light_controller/fixed/brightness"
+    brightness_command_topic: "t2t2m2p2m2ha/fairy_light_controller/fixed/brightness_set"
+    brightness_scale: 1000
+    hs_state_topic: "t2t2m2p2m2ha/fairy_light_controller/fixed/hs"
+    hs_command_topic: "t2t2m2p2m2ha/fairy_light_controller/fixed/hs_set"
+    color_temp_command_topic: "t2t2m2p2m2ha/fairy_light_controller/fixed/VCT_set"
+
+  - platform: mqtt
+    name: "Fairy Light Controller Scene"
+    icon: mdi:flare
+    availability_topic: "t2t2m2p2m2ha/fairy_light_controller/LWT"
+    state_topic: "t2t2m2p2m2ha/fairy_light_controller/scene/state"
+    command_topic: "t2t2m2p2m2ha/fairy_light_controller/scene/state_set"
+    brightness_state_topic: "t2t2m2p2m2ha/fairy_light_controller/scene/brightness"
+    brightness_command_topic: "t2t2m2p2m2ha/fairy_light_controller/scene/brightness_set"
+    brightness_scale: 1000
+    effect_state_topic: "t2t2m2p2m2ha/fairy_light_controller/scene/effect"
+    effect_command_topic: "t2t2m2p2m2ha/fairy_light_controller/scene/effect_set"
+    effect_list:
+      - "01"
+      - "02"
+      - "03"
+      - "04"
+      - "05"
+      - "06"
+      - "07"
+      - "08"
+      - "09"
+      - "10"
+      - "11"
+      - "12"
+      - "13"
+      - "14"
+      - "15"
+      - "16"
+      - "17"
+      - "18"
+      - "19"
+      - "20"
+
+  - platform: mqtt
+    name: "Fairy Light Controller Music"
+    icon: mdi:microphone-outline
+    availability_topic: "t2t2m2p2m2ha/fairy_light_controller/LWT"
+    state_topic: "t2t2m2p2m2ha/fairy_light_controller/music/state"
+    command_topic: "t2t2m2p2m2ha/fairy_light_controller/music/state_set"
+    brightness_state_topic: "t2t2m2p2m2ha/fairy_light_controller/music/brightness"
+    brightness_command_topic: "t2t2m2p2m2ha/fairy_light_controller/music/brightness_set"
+    brightness_scale: 1000
+    hs_state_topic: "t2t2m2p2m2ha/fairy_light_controller/music/hs"
+    hs_command_topic: "t2t2m2p2m2ha/fairy_light_controller/music/hs_set"
+    color_temp_command_topic: "t2t2m2p2m2ha/fairy_light_controller/music/VCT_set"
+    effect_state_topic: "t2t2m2p2m2ha/fairy_light_controller/music/effect"
+    effect_command_topic: "t2t2m2p2m2ha/fairy_light_controller/music/effect_set"
+    effect_list:
+      - "Energy - Auto"
+      - "Rhythm - Auto"
+      - "Rhythm - Pick"
+      - "Spectrum - Auto"
+      - "Spectrum - Pick"
+      - "Rolling - Auto"
+      - "Rolling - Pick"
+
+number:
+  - platform: mqtt
+    name: "Fairy Light Controller Music Sensitivity"
+    icon: mdi:microphone-outline
+    availability_topic: "t2t2m2p2m2ha/fairy_light_controller/LWT"
+    state_topic: "t2t2m2p2m2ha/fairy_light_controller/music/sensitivity"
+    command_topic: "t2t2m2p2m2ha/fairy_light_controller/music/sensitivity_set"
+    min: 0
+    max: 100
+    step: 1
+
+  - platform: mqtt
+    name: "Fairy Light Controller Sleep Time Seconds"
+    icon: mdi:timer-outline
+    availability_topic: "t2t2m2p2m2ha/fairy_light_controller/LWT"
+    state_topic: "t2t2m2p2m2ha/fairy_light_controller/sleep_timer"
+    command_topic: "t2t2m2p2m2ha/fairy_light_controller/sleep_timer_set"
+    min: 0
+    max: 86400
+    step: 60

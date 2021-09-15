@@ -1,0 +1,17 @@
+views:
+  - title: fairy_lights
+    path: fairy_lights
+    badges: []
+    cards:
+      - type: light
+        entity: light.fairy_light_controller_fixed
+      - type: light
+        entity: light.fairy_light_controller_scene
+      - type: light
+        entity: light.fairy_light_controller_music
+      - type: entities
+        entities:
+          - number.fairy_light_controller_sleep_time_seconds
+      - type: entities
+        entities:
+          - number.fairy_light_controller_music_sensitivity

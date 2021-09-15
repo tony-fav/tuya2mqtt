@@ -19,4 +19,4 @@ Devices which requires SO97 1
     - fairy light controller
 
 Devices which use non-standard GPIOs for TX and RX
-    - 
+    - STITCH/TopGreener Single Pole Dimmer Switch
