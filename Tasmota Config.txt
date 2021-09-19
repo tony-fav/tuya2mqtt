@@ -20,3 +20,6 @@ Devices which requires SO97 1
 
 Devices which use non-standard GPIOs for TX and RX
     - STITCH/TopGreener Single Pole Dimmer Switch
+
+Devices which use "Mode 2" and give the ESP GPIO for WIFI LED and Button
+    - Asakuki Diffuser
