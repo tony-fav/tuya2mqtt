@@ -1,16 +1,17 @@
 version: '2'
 services:
-  t2t2m2p2m2ha:
-    container_name: t2t2m2p2m2ha
-    image: thetonyfav/t2t2m2p2m2ha:latest
+  tuya2mqtt:
+    container_name: tuya2mqtt
+    image: thetonyfav/tuya2mqtt:20210918
     environment:
     - "MQTT_HOST=10.0.0.255"
     - "MQTT_PORT=1883"
     - "MQTT_USER=user"
     - "MQTT_PASSWORD=pass"
-    - "MQTT_CLIENT=t2t2m2p2m2ha-dekala"
+    - "MQTT_CLIENT=tuya2mqtt-dekala"
     - "MQTT_QOS=1"
+    - "MQTT_LOGGING=1"
     - "DEVICE_TOPIC=tasmota_XXXXXX"
     - "DEVICE_TYPE=dekala_table_lamp"
-    - "HA_TOPIC=t2t2m2p2m2ha/dekala_table_lamp/"
+    - "HA_TOPIC=tuya2mqtt/dekala_table_lamp/"
     restart: unless-stopped
