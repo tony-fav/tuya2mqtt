@@ -280,7 +280,7 @@ def on_message(client, userdata, msg):
                                 publish(HA_TOPIC + 'light/fixed/hs', payload='%f,%f' % (fixed_light_hue, fixed_light_sat))
                                 publish(HA_TOPIC + 'light/fixed/bri', payload='%d' % fixed_light_bri)
 
-                                if logging: publog('108: Fixed Light: Hue, Sat, Bri = %d, %d' % (fixed_light_hue, fixed_light_sat, fixed_light_bri))
+                                if logging: publog('108: Fixed Light: Hue, Sat, Bri = %d, %d, %d' % (fixed_light_hue, fixed_light_sat, fixed_light_bri))
 
                         elif DpId == 110 and DpIdType == 4:
                             effect_light_state = False
@@ -338,7 +338,10 @@ def on_message(client, userdata, msg):
         if payload_str == 'ON':
             if not device_state: pubcom('TuyaSend1', payload='1,1')
             if not light_state: pubcom('TuyaSend1', payload='11,1')
-            pubcom('TuyaSend4', payload='110,0')
+            if not (device_state and light_state): 
+                pubcom('TuyaSend4', payload='110,0')
+            else:
+                if not effect_light_state: pubcom('TuyaSend4', payload='110,0')
         else:
             if light_state: pubcom('TuyaSend1', payload='11,0')
 
@@ -346,7 +349,10 @@ def on_message(client, userdata, msg):
         if payload_str == 'ON':
             if not device_state: pubcom('TuyaSend1', payload='1,1')
             if not light_state: pubcom('TuyaSend1', payload='11,1')
-            pubcom('TuyaSend4', payload='110,1')
+            if not (device_state and light_state): 
+                pubcom('TuyaSend4', payload='110,1')
+            else:
+                if not fixed_light_state: pubcom('TuyaSend4', payload='110,1')
         else:
             if light_state: pubcom('TuyaSend1', payload='11,0')
 
@@ -354,7 +360,10 @@ def on_message(client, userdata, msg):
         if payload_str == 'ON':
             if not device_state: pubcom('TuyaSend1', payload='1,1')
             if not light_state: pubcom('TuyaSend1', payload='11,1')
-            pubcom('TuyaSend4', payload='110,2')
+            if not (device_state and light_state): 
+                pubcom('TuyaSend4', payload='110,2')
+            else:
+                if not night_light_state: pubcom('TuyaSend4', payload='110,2')
         else:
             if light_state: pubcom('TuyaSend1', payload='11,0')
 
