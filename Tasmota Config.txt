@@ -1,10 +1,10 @@
 - TuyaMCU Capability
 Module 54
 
-- ESP12F On-Board LED
+- ESP12F On-Board LED (if you tranplanted an ESP12F into your device)
 GPIO02 -> LEDLinki
 
-- TuyaMCU tries to assign dpid=1 to a switch. Says to do this to turn that off
+- TuyaMCU tries to assign dpid=1 to a switch. We won't be using any Tasmota built in Tuya control, so turn that off with this command:
 TuyaMCU 99,1
 
 - Get MQTT Publishes
@@ -13,7 +13,7 @@ SetOption66 1
 - Set timezone right bc this thing uses alarms (US, Eastern Time)
 Backlog TimeStd 0,1,11,1,2,-300; TimeDst 0,2,3,1,2,-240; timezone 99
 
-
+- Make sure Tasmota MQTT topics are set like tele/tasmota_ABCDEF/... instead of tasmota_ABCDEF/tele/...
 
 Devices which requires SO97 1
     - fairy light controller
