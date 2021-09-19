@@ -1,0 +1,88 @@
+light:
+  - platform: mqtt
+    name: "Asakuki Diffuser Effect Light"
+    icon: mdi:flare
+    availability_topic: "tuya2mqtt/asakuki_diffuser/LWT"
+    state_topic: "tuya2mqtt/asakuki_diffuser/light/effect/state"
+    command_topic: "tuya2mqtt/asakuki_diffuser/light/effect/state_set"
+
+  - platform: mqtt
+    name: "Asakuki Diffuser Fixed Light"
+    icon: mdi:palette
+    availability_topic: "tuya2mqtt/asakuki_diffuser/LWT"
+    state_topic: "tuya2mqtt/asakuki_diffuser/light/fixed/state"
+    command_topic: "tuya2mqtt/asakuki_diffuser/light/fixed/state_set"
+    brightness_state_topic: "tuya2mqtt/asakuki_diffuser/light/fixed/bri"
+    brightness_command_topic: "tuya2mqtt/asakuki_diffuser/light/fixed/bri_set"
+    brightness_scale: 255
+    hs_state_topic: "tuya2mqtt/asakuki_diffuser/light/fixed/hs"
+    hs_command_topic: "tuya2mqtt/asakuki_diffuser/light/fixed/hs_set"
+    color_temp_command_topic: "tuya2mqtt/asakuki_diffuser/light/fixed/VCT_set"
+
+  - platform: mqtt
+    name: "Asakuki Diffuser Night Light"
+    icon: mdi:weather-night
+    availability_topic: "tuya2mqtt/asakuki_diffuser/LWT"
+    state_topic: "tuya2mqtt/asakuki_diffuser/light/night/state"
+    command_topic: "tuya2mqtt/asakuki_diffuser/light/night/state_set"
+    brightness_state_topic: "tuya2mqtt/asakuki_diffuser/light/night/bri"
+    brightness_command_topic: "tuya2mqtt/asakuki_diffuser/light/night/bri_set"
+    brightness_scale: 255
+
+switch:
+  - platform: mqtt
+    name: "Asakuki Diffuser Device"
+    icon: mdi:light-switch
+    availability_topic: "tuya2mqtt/asakuki_diffuser/LWT"
+    state_topic: "tuya2mqtt/asakuki_diffuser/state"
+    command_topic: "tuya2mqtt/asakuki_diffuser/state_set"
+
+  - platform: mqtt
+    name: "Asakuki Diffuser Light"
+    icon: mdi:lightbulb-outline
+    availability_topic: "tuya2mqtt/asakuki_diffuser/LWT"
+    state_topic: "tuya2mqtt/asakuki_diffuser/light/state"
+    command_topic: "tuya2mqtt/asakuki_diffuser/light/state_set"
+
+  - platform: mqtt
+    name: "Asakuki Diffuser Weak Mist"
+    icon: mdi:water-minus-outline
+    availability_topic: "tuya2mqtt/asakuki_diffuser/LWT"
+    state_topic: "tuya2mqtt/asakuki_diffuser/mist/weak_state"
+    command_topic: "tuya2mqtt/asakuki_diffuser/mist/weak_state_set"
+
+  - platform: mqtt
+    name: "Asakuki Diffuser Strong Mist"
+    icon: mdi:water-plus-outline
+    availability_topic: "tuya2mqtt/asakuki_diffuser/LWT"
+    state_topic: "tuya2mqtt/asakuki_diffuser/mist/strong_state"
+    command_topic: "tuya2mqtt/asakuki_diffuser/mist/strong_state_set"
+
+binary_sensor:
+  - platform: mqtt
+    name: "Asakuki Diffuser Water Warning"
+    icon: mdi:water-alert-outline
+    availability_topic: "tuya2mqtt/asakuki_diffuser/LWT"
+    state_topic: "tuya2mqtt/asakuki_diffuser/mist/warning"
+    device_class: problem
+
+sensor:
+  - platform: mqtt
+    name: "Asakuki Diffuser Mist Time Remaining"
+    icon: mdi:timer-outline
+    availability_topic: "tuya2mqtt/asakuki_diffuser/LWT"
+    state_topic: "tuya2mqtt/asakuki_diffuser/mist/time_remaining"
+    unit_of_measurement: "min"
+
+select:
+  - platform: mqtt
+    name: "Asakuki Diffuser Mist Timer Mode"
+    icon: mdi:timer-outline
+    availability_topic: "tuya2mqtt/asakuki_diffuser/LWT"
+    state_topic: "tuya2mqtt/asakuki_diffuser/mist/timer_mode"
+    command_topic: "tuya2mqtt/asakuki_diffuser/mist/timer_mode_set"
+    options:
+      - "On"
+      - "1 Hour"
+      - "3 Hours"
+      - "6 Hours"

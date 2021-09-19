@@ -1,0 +1,27 @@
+03:20:49.564 SRC: WebConsole from 192.168.0.145
+03:20:49.567 CMD: Group 0, Index 0, Command "TUYASEND", Data ""
+03:20:49.571 TYA: Read MCU state
+03:20:49.581 TYA: Send "55aa0008000007"
+03:20:49.586 MQT: K_Diffuser/stat/RESULT = {"TuyaSend":"Done"}
+03:20:49.666 MQT: K_Diffuser/tele/RESULT = {"TuyaReceived":{"Data":"55AA01070005010100010110","Cmnd":7,"CmndData":"0101000101","DpType1Id1":1,"1":{"DpId":1,"DpIdType":1,"DpIdData":"01"}}}
+03:20:49.670 TYA: fnId=99 is set for dpId=1
+03:20:49.677 MQT: K_Diffuser/tele/RESULT = {"TuyaReceived":{"Data":"55AA010700050B010001011A","Cmnd":7,"CmndData":"0B01000101","DpType1Id11":1,"11":{"DpId":11,"DpIdType":1,"DpIdData":"01"}}}
+03:20:49.680 TYA: fnId=0 is set for dpId=11
+03:20:49.686 MQT: K_Diffuser/tele/RESULT = {"TuyaReceived":{"Data":"55AA010700050C050001011F","Cmnd":7,"CmndData":"0C05000101","DpType5Id12":"0x01","12":{"DpId":12,"DpIdType":5,"DpIdData":"01"}}}
+03:20:49.691 TYA: fnId=0 is set for dpId=12
+03:20:49.697 MQT: K_Diffuser/tele/RESULT = {"TuyaReceived":{"Data":"55AA010700050D040001001E","Cmnd":7,"CmndData":"0D04000100","DpType4Id13":0,"13":{"DpId":13,"DpIdType":4,"DpIdData":"00"}}}
+03:20:49.701 TYA: fnId=0 is set for dpId=13
+03:20:49.707 MQT: K_Diffuser/tele/RESULT = {"TuyaReceived":{"Data":"55AA010700080E0200040000000023","Cmnd":7,"CmndData":"0E02000400000000","DpType2Id14":0,"14":{"DpId":14,"DpIdType":2,"DpIdData":"00000000"}}}
+03:20:49.711 TYA: fnId=0 is set for dpId=14
+03:20:49.714 TYA: RX value 0 from dpId 14 
+03:20:49.720 MQT: K_Diffuser/tele/RESULT = {"TuyaReceived":{"Data":"55AA0107000567040001027A","Cmnd":7,"CmndData":"6704000102","DpType4Id103":2,"103":{"DpId":103,"DpIdType":4,"DpIdData":"02"}}}
+03:20:49.724 TYA: fnId=0 is set for dpId=103
+03:20:49.731 MQT: K_Diffuser/tele/RESULT = {"TuyaReceived":{"Data":"55AA010700076C03000330303616","Cmnd":7,"CmndData":"6C030003303036","DpType3Id108":"006","108":{"DpId":108,"DpIdType":3,"DpIdData":"303036","Type3Data":"006"}}}
+03:20:49.735 TYA: fnId=0 is set for dpId=108
+03:20:49.742 MQT: K_Diffuser/tele/RESULT = {"TuyaReceived":{"Data":"55AA010700056D040001007E","Cmnd":7,"CmndData":"6D04000100","DpType4Id109":0,"109":{"DpId":109,"DpIdType":4,"DpIdData":"00"}}}
+03:20:49.746 TYA: fnId=0 is set for dpId=109
+03:20:49.753 MQT: K_Diffuser/tele/RESULT = {"TuyaReceived":{"Data":"55AA010700056E040001007F","Cmnd":7,"CmndData":"6E04000100","DpType4Id110":0,"110":{"DpId":110,"DpIdType":4,"DpIdData":"00"}}}
+03:20:49.757 TYA: fnId=0 is set for dpId=110
+03:20:49.764 MQT: K_Diffuser/tele/RESULT = {"TuyaReceived":{"Data":"55AA010700086F020004000000FF83","Cmnd":7,"CmndData":"6F020004000000FF","DpType2Id111":255,"111":{"DpId":111,"DpIdType":2,"DpIdData":"000000FF"}}}
+03:20:49.768 TYA: fnId=0 is set for dpId=111
+03:20:49.770 TYA: RX value 255 from dpId 111

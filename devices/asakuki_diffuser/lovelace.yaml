@@ -1,0 +1,32 @@
+views:
+  - title: asakuki_diffuser
+    path: asakuki_diffuser
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: light
+                entity: light.asakuki_diffuser_effect_light
+                name: Effect
+              - type: light
+                entity: light.asakuki_diffuser_fixed_light
+                name: Fixed
+              - type: light
+                entity: light.asakuki_diffuser_night_light
+                name: Night
+          - type: vertical-stack
+            cards:
+              - type: entities
+                entities:
+                  - entity: switch.asakuki_diffuser_weak_mist
+                    name: Weak
+                  - entity: switch.asakuki_diffuser_strong_mist
+                    name: Strong
+                  - entity: select.asakuki_diffuser_mist_timer_mode
+                    name: Timer Mode
+                  - entity: sensor.asakuki_diffuser_mist_time_remaining
+                    name: Time Left
+                  - entity: binary_sensor.asakuki_diffuser_water_warning
+                    name: Water Level

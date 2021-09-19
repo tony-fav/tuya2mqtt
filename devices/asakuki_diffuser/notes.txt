@@ -1,0 +1,29 @@
+DPID
+  1     Bool        Device Power
+ 11     Bool        Light Power
+ 12     Bitmap      0 no water warning, 1 water level warning
+ 13     Enum        0 to 3: "Spray Timer": 0 = ON, 1 = 1 Hour, 2 = 3 Hours, 3 = 6 Hours
+ 14     Value       seems to be timer amount remaining in minutes. Read only
+103     Enum        0 to 2: "Spray": 0 = Weak, 1 = Strong, 2 = off
+108     String      Format RRGGBBHHHHSSVV (Red, Green, Blue, Hue, Saturation, Value = Brightness) Scales (0-255, 0-255, 0-255, 0-360, 100-100, 0-100)
+110     Enum        0 to 2: Light Type: 0 = Gradient (An Effect, No Options), 1 = Fixed (Pick Color and Brightness), 2 = Nightlight (Brightness)
+111     Value       Nightlight Brigthness 0 to 255
+
+DPIDs From TuyaSend0 and TuyaSend8
+    "DpId":  1,"DpIdType":1,"DpIdData":"01"
+    "DpId": 11,"DpIdType":1,"DpIdData":"01"
+    "DpId": 12,"DpIdType":5,"DpIdData":"01"
+    "DpId": 13,"DpIdType":4,"DpIdData":"00"
+    "DpId": 14,"DpIdType":2,"DpIdData":"00000000"
+    "DpId":103,"DpIdType":4,"DpIdData":"02"
+    "DpId":108,"DpIdType":3,"DpIdData":"303036","Type3Data":"006"
+    "DpId":110,"DpIdType":4,"DpIdData":"00"
+    "DpId":111,"DpIdType":2,"DpIdData":"000000FF"
+
+    "DpId":109,"DpIdType":4,"DpIdData":"00"
+
+this line: 
+03:21:47.311 MQT: K_Diffuser/tele/RESULT = {"TuyaReceived":{"Data":"55AA010200020E0416","Cmnd":2,"CmndData":"0E04"}}
+indicates that the wifi module is in "self processing mode" so you have 2 GPIOs to assign. 
+From the docs "The data length is 2: the first byte is the GPIO number of the Wi-Fi status indicator. The second byte is the GPIO number of the Wi-Fi reset button."
+so you've got an LED on GPIO14 you can control and you've got a button on GPIO4 you can use.
