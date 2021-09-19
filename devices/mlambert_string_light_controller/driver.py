@@ -392,7 +392,9 @@ def on_message(client, userdata, msg):
         b = int(pick2_color2_b/bri*new_pick2_color2_bri)
         new_color_str = pick2_str[0:14] + ('%02x%02x%02x' % (r, g, b))
         pubcom('TuyaSend3', payload='101,%s' % new_color_str)
-
+        
+    elif msg.topic == HA_TOPIC + 'scene' + '_set':
+        pubcom('TuyaSend4', payload='21,%d' % inv_scene_types[payload_str])
 
 
 client = mqtt.Client(MQTT_CLIENT)
