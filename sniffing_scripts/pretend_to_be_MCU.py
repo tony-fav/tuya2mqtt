@@ -4,18 +4,24 @@ from time import sleep
 ### Inputs
 serial_port = "COM6"
 serial_baudrate = 115200
+# serial_baudrate = 9600
 log_extras = False # heartbeat, wifi connections, status queries, etc...
 reset_connection = False
 pub_to_tas = True
-tas_device = 'tasmota_197248'
+if pub_to_tas: tas_device = 'tasmota_5CDF10'
 if pub_to_tas: from secrets import MQTT_HOST, MQTT_PORT, MQTT_USER, MQTT_PASSWORD
 
-product_string = '55AA0301002A7B2270223A2264737475716B766D633873676E746C6B222C2276223A22312E302E30222C226D223A307D9C' # MLambert String Lights Controller, {"p":"dstuqkvmc8sgntlk","v":"1.0.0","m":0}
+# product_string = '55AA0301002A7B2270223A2264737475716B766D633873676E746C6B222C2276223A22312E302E30222C226D223A307D9C' # MLambert String Lights Controller, {"p":"dstuqkvmc8sgntlk","v":"1.0.0","m":0}
 # product_string = '55AA0301002A7B2270223A227570696A6673346B7261727477687176222C2276223A22312E302E30222C226D223A307D9E' # HeimVision N600S, {"p":"upijfs4krartwhqv","v":"1.0.0","m":0}
 # product_string = '55AA0301002A7B2270223A2263376173626867743273767568773573222C2276223A22322E302E33222C226D223A327D1F' # Fairy Lights Controller, {"p":"c7asbhgt2svuhw5s","v":"2.0.3","m":2}
 # product_string = '55AA0301002B7B2270223A226776666D773863386E3932756D706178222C2276223A22332E332E3136222C226D223A307D2A' # Esmlfe Fan-Light Switch, {"p":"gvfmw8c8n92umpax","v":"3.3.16","m":0}
+# product_string = '55AA0001001548584D5270454B4C6C4B4C524131624B342E312E360B' # Stitch Dimmer Switch, HXMRpEKLlKLRA1bK4.1.6
+product_string = '55AA01010015364153644E776539496461657751456C312E302E3080' # Asakuki Diffuser, 6ASdNwe9IdaewQEl1.0.0
+# product_string = '55AA0301002A7B2270223A226A636D79727777667262386E63727969222C2276223A22312E302E30222C226D223A307D99' # Tessan Outdoor Dimmer Plug, {"p":"jcmyrwwfrb8ncryi","v":"1.0.0","m":0}
+
 
 ### Script
+protocol_version = int(product_string[4:6])
 
 # Wait for serial port to be available
 while 1:
@@ -42,7 +48,7 @@ tuya_comm = []
 first_heartbeat = True
 first_loop_tell_to_reset_wifi = True
 while 1:
-    client.loop()
+    if pub_to_tas: client.loop()
     x = ser.read()
     if x == b'\x55':
         y = ser.read()
@@ -68,28 +74,33 @@ while 1:
             ts = ''.join('%02x' % b for b in tuya_comm)
 
             if log_extras: print('------\n' + ts)
+
             if len(tuya_comm) == 0:
                 pass
+
             elif ts == '55aa00000000ff': 
                 if log_extras: print('Heart Beat') # Heart Beat
                 if first_heartbeat:
-                    ser.write(bytearray.fromhex('55AA030000010003'))
+                    ser.write(bytearray.fromhex('55AA%02X00000100%02X' % (protocol_version, protocol_version)))
                     first_heartbeat = False
                 else:
-                    ser.write(bytearray.fromhex('55AA030000010104'))
+                    ser.write(bytearray.fromhex('55AA%02X00000101%02X' % (protocol_version, protocol_version + 1)))
+
             elif tuya_comm[3] == ord(b'\x01'): 
                 if log_extras: print('Query Product Info')
                 ser.write(bytearray.fromhex(product_string))
+
             elif tuya_comm[3] == ord(b'\x02'): 
                 if log_extras: print('Query Working Mode')
-                ser.write(bytearray.fromhex('55AA0302000004'))
+                ser.write(bytearray.fromhex('55AA%02X020000%02X' % (protocol_version, protocol_version + 1)))
+
             elif tuya_comm[3] == ord(b'\x03'): 
                 if log_extras: print('Network Status')
-                ser.write(bytearray.fromhex('55AA0303000005'))
+                ser.write(bytearray.fromhex('55AA%02X030000%02X' % (protocol_version, protocol_version + 2)))
 
                 # THIS RESETS ITS WIFI SETTINGS. We do this bc the app freaks out when the fake device isn't newly added.
                 if reset_connection and first_loop_tell_to_reset_wifi:
-                    ser.write(bytearray.fromhex('55AA0304000006'))
+                    ser.write(bytearray.fromhex('55AA%02X040000%02X' % (protocol_version, protocol_version + 3)))
                     first_loop_tell_to_reset_wifi = False
             elif tuya_comm[3] == ord(b'\x08'): 
                 if log_extras: print('Query Status') 
@@ -103,11 +114,12 @@ while 1:
                     print(rc)
 
                 ts_ack = list(ts[:])
-                ts_ack[5] = '3'
+                ts_ack[5] = '%1X' % protocol_version
+                chk_add = 1 + protocol_version
                 ts_ack[7] = '7'
                 chk1 = ts_ack[-2]
                 chk2 = ts_ack[-1]
-                chk = '%02X' % ((int.from_bytes(bytearray.fromhex(chk1+chk2), byteorder='big') + 4) % 256)
+                chk = '%02X' % ((int.from_bytes(bytearray.fromhex(chk1+chk2), byteorder='big') + chk_add) % 256)
                 ts_ack[-2] = chk[0]
                 ts_ack[-1] = chk[1]
                 ser.write(bytearray.fromhex(''.join(ts_ack)))
