@@ -5,9 +5,9 @@ from time import sleep
 serial_port = "COM6"
 serial_baudrate = 115200
 # serial_baudrate = 9600
-log_extras = False # heartbeat, wifi connections, status queries, etc...
-reset_connection = False
-pub_to_tas = True
+log_extras = True # heartbeat, wifi connections, status queries, etc...
+reset_connection = True
+pub_to_tas = False
 if pub_to_tas: tas_device = 'tasmota_5CDF10'
 if pub_to_tas: from secrets import MQTT_HOST, MQTT_PORT, MQTT_USER, MQTT_PASSWORD
 
@@ -16,9 +16,10 @@ if pub_to_tas: from secrets import MQTT_HOST, MQTT_PORT, MQTT_USER, MQTT_PASSWOR
 # product_string = '55AA0301002A7B2270223A2263376173626867743273767568773573222C2276223A22322E302E33222C226D223A327D1F' # Fairy Lights Controller, {"p":"c7asbhgt2svuhw5s","v":"2.0.3","m":2}
 # product_string = '55AA0301002B7B2270223A226776666D773863386E3932756D706178222C2276223A22332E332E3136222C226D223A307D2A' # Esmlfe Fan-Light Switch, {"p":"gvfmw8c8n92umpax","v":"3.3.16","m":0}
 # product_string = '55AA0001001548584D5270454B4C6C4B4C524131624B342E312E360B' # Stitch Dimmer Switch, HXMRpEKLlKLRA1bK4.1.6
-product_string = '55AA01010015364153644E776539496461657751456C312E302E3080' # Asakuki Diffuser, 6ASdNwe9IdaewQEl1.0.0
+# product_string = '55AA01010015364153644E776539496461657751456C312E302E3080' # Asakuki Diffuser, 6ASdNwe9IdaewQEl1.0.0
 # product_string = '55AA0301002A7B2270223A226A636D79727777667262386E63727969222C2276223A22312E302E30222C226D223A307D99' # Tessan Outdoor Dimmer Plug, {"p":"jcmyrwwfrb8ncryi","v":"1.0.0","m":0}
-
+# product_string = '55AA0301002A7B2270223A227974746C726F69376E7231387671626F222C2276223A22312E302E30222C226D223A307D3E' # Dehumidifier, {"p":"yttlroi7nr18vqbo","v":"1.0.0","m":0}
+product_string = '55AA0301002A7B2270223A2266636C64736161646333687A66396579222C2276223A22312E302E30222C226D223A307D16' # Tuya Fan Controller, {"p":"fcldsaadc3hzf9ey","v":"1.0.0","m":0}
 
 ### Script
 protocol_version = int(product_string[4:6])
