@@ -2,7 +2,7 @@ import serial
 from time import sleep
 
 ### Inputs
-serial_port = "COM6"
+serial_port = "COM4"
 serial_baudrate = 115200
 # serial_baudrate = 9600
 log_extras = True # heartbeat, wifi connections, status queries, etc...
@@ -19,7 +19,11 @@ if pub_to_tas: from secrets import MQTT_HOST, MQTT_PORT, MQTT_USER, MQTT_PASSWOR
 # product_string = '55AA01010015364153644E776539496461657751456C312E302E3080' # Asakuki Diffuser, 6ASdNwe9IdaewQEl1.0.0
 # product_string = '55AA0301002A7B2270223A226A636D79727777667262386E63727969222C2276223A22312E302E30222C226D223A307D99' # Tessan Outdoor Dimmer Plug, {"p":"jcmyrwwfrb8ncryi","v":"1.0.0","m":0}
 # product_string = '55AA0301002A7B2270223A227974746C726F69376E7231387671626F222C2276223A22312E302E30222C226D223A307D3E' # Dehumidifier, {"p":"yttlroi7nr18vqbo","v":"1.0.0","m":0}
-product_string = '55AA0301002A7B2270223A2266636C64736161646333687A66396579222C2276223A22312E302E30222C226D223A307D16' # Tuya Fan Controller, {"p":"fcldsaadc3hzf9ey","v":"1.0.0","m":0}
+# product_string = '55AA0301002A7B2270223A2266636C64736161646333687A66396579222C2276223A22312E302E30222C226D223A307D16' # Tuya Fan Controller, {"p":"fcldsaadc3hzf9ey","v":"1.0.0","m":0}
+# product_string = '55AA0301002A7B2270223A22707538723065747A6C63756B6B6D6275222C2276223A22312E302E30222C226D223A307D5F' # {"p":"pu8r0etzlcukkmbu","v":"1.0.0","m":0}, Tuya Smart Name: Screen sync smart light, Product Name: Light Mi NEO HDMI Sync Box with LED TV Backlight, Link: https://www.amazon.com/dp/B09BF5D2Q8?tag=digiblurd-20
+# product_string = '55AA0301002A7B2270223A2266757879656E64787177323670367474222C2276223A22312E302E30222C226D223A327D4A' # {"p":"fuxyendxqw26p6tt","v":"1.0.0","m":2}, MJ Fan Controller
+# product_string = '55AA0301002A7B2270223A22716166726F6461626F63327274736130222C2276223A22332E342E33222C226D223A307D26' # {"p":"qafrodaboc2rtsa0","v":"3.4.3","m":0}, "Dimmer Switch DS02S"
+product_string = '55AA0301002A7B2270223A226F7071716D666A7A3779326F36793661222C2276223A22332E362E32222C226D223A307D08' # {"p":"opqqmfjz7y2o6y6a","v":"3.6.2","m":0}, "Dimmer Switch DS02S(bk)" (has DPID for LED Indicator)
 
 ### Script
 protocol_version = int(product_string[4:6])

@@ -1,0 +1,137 @@
+
+04:05:23.702 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA0301002A7B2270223A227974746C726F69376E7231387671626F222C2276223A22312E302E30222C226D223A307D3E","Cmnd":1,"CmndData":"7B2270223A227974746C726F69376E7231387671626F222C2276223A22312E302E30222C226D223A307D"}}
+04:05:23.710 TYA: MCU Product ID: {"p":"yttlroi7nr18vqbo","v":"1.0.0","m":0}
+
+"1":{"DpId":1,"DpIdType":1,"DpIdData":"00"}}}
+"2":{"DpId":2,"DpIdType":2,"DpIdData":"00000032"}}}
+"5":{"DpId":5,"DpIdType":4,"DpIdData":"00"}}}
+"5":{"DpId":5,"DpIdType":4,"DpIdData":"00"}}}
+"6":{"DpId":6,"DpIdType":2,"DpIdData":"0000004B"}}}
+"7":{"DpId":7,"DpIdType":2,"DpIdData":"00000045"}}}
+"8":{"DpId":8,"DpIdType":4,"DpIdData":"00"}}}
+"12":{"DpId":12,"DpIdType":1,"DpIdData":"00"}}}
+"101":{"DpId":101,"DpIdType":5,"DpIdData":"00"}}}
+
+DpId
+  1   Bool    Device On/Off
+  2   Value   Humidity Set in %
+  5   Enum    Operational Mode (Standard, Rainy, Dry, Sleep as 0, 1, 2, 3)
+  6   Value   Humidity Read in %
+  7   Value   Temperature Read in F1
+  8   Enum    Timer Set (0, 1 Hr, 2 Hr, 3 Hr, 4 Hr)
+ 12   Bool    Anion Mode On/Off
+101   Bitmask Water Full Warning
+
+
+04:03:58.976 SRC: WebConsole from XXXXXXXXXX
+04:03:58.979 CMD: Grp 0, Cmnd 'TUYASEND', Idx 0, Len 0, Data ''
+04:03:58.982 TYA: Read MCU state
+04:03:58.991 TYA: Send "55aa0008000007"
+04:03:58.995 MQT: stat/basement_dehumidifier/RESULT = {"TuyaSend":"Done"}
+04:03:59.058 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA03070005010100010011","Cmnd":7,"CmndData":"0101000100","DpType1Id1":0,"1":{"DpId":1,"DpIdType":1,"DpIdData":"00"}}}
+04:03:59.063 TYA: fnId=11 is set for dpId=1
+04:03:59.065 TYA: RX Relay-1 --> MCU State: Off Current State:Off
+04:03:59.130 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA0307000802020004000000324B","Cmnd":7,"CmndData":"0202000400000032","DpType2Id2":50,"2":{"DpId":2,"DpIdType":2,"DpIdData":"00000032"}}}
+04:03:59.137 TYA: fnId=74 is set for dpId=2
+04:03:59.139 TYA: RX value 50 from dpId 2 
+04:03:59.198 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA03070005050400010018","Cmnd":7,"CmndData":"0504000100","DpType4Id5":0,"5":{"DpId":5,"DpIdType":4,"DpIdData":"00"}}}
+04:03:59.205 TYA: fnId=0 is set for dpId=5
+04:03:59.270 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA03070008060200040000004A67","Cmnd":7,"CmndData":"060200040000004A","DpType2Id6":74,"6":{"DpId":6,"DpIdType":2,"DpIdData":"0000004A"}}}
+04:03:59.279 TYA: fnId=73 is set for dpId=6
+04:03:59.280 TYA: RX value 74 from dpId 6 
+04:03:59.341 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA03070008070200040000004563","Cmnd":7,"CmndData":"0702000400000045","DpType2Id7":69,"7":{"DpId":7,"DpIdType":2,"DpIdData":"00000045"}}}
+04:03:59.348 TYA: fnId=71 is set for dpId=7
+04:03:59.350 TYA: RX value 69 from dpId 7 
+04:03:59.407 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA030700050C010001001C","Cmnd":7,"CmndData":"0C01000100","DpType1Id12":0,"12":{"DpId":12,"DpIdType":1,"DpIdData":"00"}}}
+04:03:59.414 TYA: fnId=12 is set for dpId=12
+04:03:59.415 TYA: RX Relay-2 --> MCU State: Off Current State:Off
+04:03:59.478 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA0307000508040001001B","Cmnd":7,"CmndData":"0804000100","DpType4Id8":0,"8":{"DpId":8,"DpIdType":4,"DpIdData":"00"}}}
+04:03:59.485 TYA: fnId=0 is set for dpId=8
+04:03:59.547 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA03070005650500010079","Cmnd":7,"CmndData":"6505000100","DpType5Id101":"0x00","101":{"DpId":101,"DpIdType":5,"DpIdData":"00"}}}
+04:03:59.561 RUL: TUYARECEIVED#DPTYPE5ID101 performs "publish stat/basement_dehumidifier/error 0X00"
+04:03:59.564 SRC: Rule
+04:03:59.566 CMD: Grp 0, Cmnd 'PUBLISH', Idx 1, Len 37, Data 'stat/basement_dehumidifier/error 0X00'
+04:03:59.571 MQT: stat/basement_dehumidifier/error = 0X00
+04:03:59.573 TYA: fnId=0 is set for dpId=101
+04:04:02.296 WIF: Checking connection...
+04:04:03.059 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA03070008060200040000004B68","Cmnd":7,"CmndData":"060200040000004B","DpType2Id6":75,"6":{"DpId":6,"DpIdType":2,"DpIdData":"0000004B"}}}
+04:04:03.065 TYA: fnId=73 is set for dpId=6
+04:04:03.070 MQT: tele/basement_dehumidifier/SENSOR = {"TuyaSNS":{"Humidity":75}}
+04:04:03.075 TYA: RX value 75 from dpId 6 
+
+
+04:05:23.573 CMD: tuyasend8
+04:05:23.575 SRC: WebConsole from XXXXXXXXX
+04:05:23.577 CMD: Grp 0, Cmnd 'TUYASEND', Idx 8, Len 0, Data ''
+04:05:23.580 TYA: Read MCU state
+04:05:23.589 TYA: Send "55aa0001000000"
+04:05:23.594 MQT: stat/basement_dehumidifier/RESULT = {"TuyaSend":"Done"}
+04:05:23.702 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA0301002A7B2270223A227974746C726F69376E7231387671626F222C2276223A22312E302E30222C226D223A307D3E","Cmnd":1,"CmndData":"7B2270223A227974746C726F69376E7231387671626F222C2276223A22312E302E30222C226D223A307D"}}
+04:05:23.710 TYA: MCU Product ID: {"p":"yttlroi7nr18vqbo","v":"1.0.0","m":0}
+04:05:23.719 TYA: Send "55aa0002000001"
+04:05:23.789 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA0302000004","Cmnd":2}}
+04:05:23.795 TYA: RX MCU configuration Mode=0
+04:05:23.797 TYA: Read MCU state
+04:05:23.806 TYA: Send "55aa0008000007"
+04:05:23.875 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA03070005010100010011","Cmnd":7,"CmndData":"0101000100","DpType1Id1":0,"1":{"DpId":1,"DpIdType":1,"DpIdData":"00"}}}
+04:05:23.882 TYA: fnId=11 is set for dpId=1
+04:05:23.884 TYA: RX Relay-1 --> MCU State: Off Current State:Off
+04:05:23.947 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA0307000802020004000000324B","Cmnd":7,"CmndData":"0202000400000032","DpType2Id2":50,"2":{"DpId":2,"DpIdType":2,"DpIdData":"00000032"}}}
+04:05:23.954 TYA: fnId=74 is set for dpId=2
+04:05:23.956 TYA: RX value 50 from dpId 2 
+04:05:24.014 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA03070005050400010018","Cmnd":7,"CmndData":"0504000100","DpType4Id5":0,"5":{"DpId":5,"DpIdType":4,"DpIdData":"00"}}}
+04:05:24.019 TYA: fnId=0 is set for dpId=5
+04:05:24.086 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA03070008060200040000004A67","Cmnd":7,"CmndData":"060200040000004A","DpType2Id6":74,"6":{"DpId":6,"DpIdType":2,"DpIdData":"0000004A"}}}
+04:05:24.092 TYA: fnId=73 is set for dpId=6
+04:05:24.094 TYA: RX value 74 from dpId 6 
+04:05:24.156 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA03070008070200040000004563","Cmnd":7,"CmndData":"0702000400000045","DpType2Id7":69,"7":{"DpId":7,"DpIdType":2,"DpIdData":"00000045"}}}
+04:05:24.164 TYA: fnId=71 is set for dpId=7
+04:05:24.165 TYA: RX value 69 from dpId 7 
+04:05:24.224 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA030700050C010001001C","Cmnd":7,"CmndData":"0C01000100","DpType1Id12":0,"12":{"DpId":12,"DpIdType":1,"DpIdData":"00"}}}
+04:05:24.231 TYA: fnId=12 is set for dpId=12
+04:05:24.232 TYA: RX Relay-2 --> MCU State: Off Current State:Off
+04:05:24.293 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA0307000508040001001B","Cmnd":7,"CmndData":"0804000100","DpType4Id8":0,"8":{"DpId":8,"DpIdType":4,"DpIdData":"00"}}}
+04:05:24.300 TYA: fnId=0 is set for dpId=8
+04:05:24.364 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA03070005650500010079","Cmnd":7,"CmndData":"6505000100","DpType5Id101":"0x00","101":{"DpId":101,"DpIdType":5,"DpIdData":"00"}}}
+04:05:24.378 RUL: TUYARECEIVED#DPTYPE5ID101 performs "publish stat/basement_dehumidifier/error 0X00"
+04:05:24.380 SRC: Rule
+04:05:24.382 CMD: Grp 0, Cmnd 'PUBLISH', Idx 1, Len 37, Data 'stat/basement_dehumidifier/error 0X00'
+04:05:24.389 MQT: stat/basement_dehumidifier/error = 0X00
+04:05:24.391 TYA: fnId=0 is set for dpId=101
+04:05:24.919 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA03070008060200040000004B68","Cmnd":7,"CmndData":"060200040000004B","DpType2Id6":75,"6":{"DpId":6,"DpIdType":2,"DpIdData":"0000004B"}}}
+04:05:24.927 TYA: fnId=73 is set for dpId=6
+04:05:24.933 MQT: tele/basement_dehumidifier/SENSOR = {"TuyaSNS":{"Humidity":75}}
+04:05:24.938 TYA: RX value 75 from dpId 6 
+04:05:25.917 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA03070008060200040000004A67","Cmnd":7,"CmndData":"060200040000004A","DpType2Id6":74,"6":{"DpId":6,"DpIdType":2,"DpIdData":"0000004A"}}}
+04:05:25.925 TYA: fnId=73 is set for dpId=6
+04:05:25.929 MQT: tele/basement_dehumidifier/SENSOR = {"TuyaSNS":{"Humidity":74}}
+04:05:25.933 TYA: RX value 74 from dpId 6 
+04:05:27.425 MQT: tele/basement_dehumidifier/STATE = {"Time":"2021-09-21T04:05:27","Uptime":"0T02:50:14","UptimeSec":10214,"Heap":26,"SleepMode":"Dynamic","Sleep":50,"LoadAvg":19,"MqttCount":1,"POWER1":"OFF","POWER2":"OFF","Wifi":{"AP":2,"SSId":"iandi-local-iot-north","BSSId":"F4:92:BF:AF:CE:F1","Channel":11,"Mode":"11n","RSSI":84,"Signal":-58,"LinkCount":1,"Downtime":"0T00:00:07"}}
+04:05:27.434 MQT: tele/basement_dehumidifier/SENSOR = {"Time":"2021-09-21T04:05:27","TuyaSNS":{"Temperature":69,"Humidity":74,"HumSet":50},"TempUnit":"F"}
+04:05:29.910 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA03070008060200040000004B68","Cmnd":7,"CmndData":"060200040000004B","DpType2Id6":75,"6":{"DpId":6,"DpIdType":2,"DpIdData":"0000004B"}}}
+04:05:29.916 TYA: fnId=73 is set for dpId=6
+04:05:29.921 MQT: tele/basement_dehumidifier/SENSOR = {"TuyaSNS":{"Humidity":75}}
+04:05:29.924 TYA: RX value 75 from dpId 6 
+04:05:30.903 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA03070008060200040000004A67","Cmnd":7,"CmndData":"060200040000004A","DpType2Id6":74,"6":{"DpId":6,"DpIdType":2,"DpIdData":"0000004A"}}}
+04:05:30.907 TYA: fnId=73 is set for dpId=6
+04:05:30.910 MQT: tele/basement_dehumidifier/SENSOR = {"TuyaSNS":{"Humidity":74}}
+04:05:30.914 TYA: RX value 74 from dpId 6 
+04:05:31.902 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA03070008060200040000004B68","Cmnd":7,"CmndData":"060200040000004B","DpType2Id6":75,"6":{"DpId":6,"DpIdType":2,"DpIdData":"0000004B"}}}
+04:05:31.906 TYA: fnId=73 is set for dpId=6
+04:05:31.910 MQT: tele/basement_dehumidifier/SENSOR = {"TuyaSNS":{"Humidity":75}}
+04:05:31.914 TYA: RX value 75 from dpId 6 
+04:05:32.454 TYA: Send "55aa00000000ff"
+04:05:32.521 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA030000010104","Cmnd":0,"CmndData":"01"}}
+04:05:32.526 TYA: Heartbeat
+04:05:32.898 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA03070008060200040000004A67","Cmnd":7,"CmndData":"060200040000004A","DpType2Id6":74,"6":{"DpId":6,"DpIdType":2,"DpIdData":"0000004A"}}}
+04:05:32.903 TYA: fnId=73 is set for dpId=6
+04:05:32.906 MQT: tele/basement_dehumidifier/SENSOR = {"TuyaSNS":{"Humidity":74}}
+04:05:32.909 TYA: RX value 74 from dpId 6 
+04:05:37.894 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA03070008060200040000004B68","Cmnd":7,"CmndData":"060200040000004B","DpType2Id6":75,"6":{"DpId":6,"DpIdType":2,"DpIdData":"0000004B"}}}
+04:05:37.902 TYA: fnId=73 is set for dpId=6
+04:05:37.909 MQT: tele/basement_dehumidifier/SENSOR = {"TuyaSNS":{"Humidity":75}}
+04:05:37.912 TYA: RX value 75 from dpId 6 
+04:05:39.891 MQT: tele/basement_dehumidifier/RESULT = {"TuyaReceived":{"Data":"55AA03070008060200040000004A67","Cmnd":7,"CmndData":"060200040000004A","DpType2Id6":74,"6":{"DpId":6,"DpIdType":2,"DpIdData":"0000004A"}}}
+04:05:39.898 TYA: fnId=73 is set for dpId=6
+04:05:39.904 MQT: tele/basement_dehumidifier/SENSOR = {"TuyaSNS":{"Humidity":74}}
+04:05:39.908 TYA: RX value 74 from dpId 6 
