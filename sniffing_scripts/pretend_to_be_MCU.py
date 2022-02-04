@@ -2,7 +2,7 @@ import serial
 from time import sleep
 
 ### Inputs
-serial_port = "COM4"
+serial_port = "COM6"
 serial_baudrate = 115200
 # serial_baudrate = 9600
 log_extras = True # heartbeat, wifi connections, status queries, etc...
@@ -23,7 +23,8 @@ if pub_to_tas: from secrets import MQTT_HOST, MQTT_PORT, MQTT_USER, MQTT_PASSWOR
 # product_string = '55AA0301002A7B2270223A22707538723065747A6C63756B6B6D6275222C2276223A22312E302E30222C226D223A307D5F' # {"p":"pu8r0etzlcukkmbu","v":"1.0.0","m":0}, Tuya Smart Name: Screen sync smart light, Product Name: Light Mi NEO HDMI Sync Box with LED TV Backlight, Link: https://www.amazon.com/dp/B09BF5D2Q8?tag=digiblurd-20
 # product_string = '55AA0301002A7B2270223A2266757879656E64787177323670367474222C2276223A22312E302E30222C226D223A327D4A' # {"p":"fuxyendxqw26p6tt","v":"1.0.0","m":2}, MJ Fan Controller
 # product_string = '55AA0301002A7B2270223A22716166726F6461626F63327274736130222C2276223A22332E342E33222C226D223A307D26' # {"p":"qafrodaboc2rtsa0","v":"3.4.3","m":0}, "Dimmer Switch DS02S"
-product_string = '55AA0301002A7B2270223A226F7071716D666A7A3779326F36793661222C2276223A22332E362E32222C226D223A307D08' # {"p":"opqqmfjz7y2o6y6a","v":"3.6.2","m":0}, "Dimmer Switch DS02S(bk)" (has DPID for LED Indicator)
+# product_string = '55AA0301002A7B2270223A226F7071716D666A7A3779326F36793661222C2276223A22332E362E32222C226D223A307D08' # {"p":"opqqmfjz7y2o6y6a","v":"3.6.2","m":0}, "Dimmer Switch DS02S(bk)" (has DPID for LED Indicator)
+product_string = '55AA0301002A7B2270223A2270776E3872706C626A746F6B78616563222C2276223A22312E302E30222C226D223A307D85' # {"p":"pwn8rplbjtokxaec","v":"1.0.0","m":0}, "Smart Ceiling Fan" https://carrousa.com/collections/replacement-parts/products/pcb-for-52-inch-carro-fletcher-smart-ceiling-fan-with-light
 
 ### Script
 protocol_version = int(product_string[4:6])
